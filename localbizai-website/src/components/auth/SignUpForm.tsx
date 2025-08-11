@@ -7,6 +7,7 @@ import { signUpSchema } from '@/lib/validations';
 import * as z from 'zod';
 
 import { signUpWithEmailAndPassword, signInWithGoogle } from '@/lib/auth';
+import { Button } from '@/components/ui/Button';
 import {
   Form,
   FormControl,

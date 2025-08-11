@@ -1,7 +1,13 @@
+
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+// Import all landing page components
 import { Hero } from "@/components/landing/Hero";
-import { Features } from "@/components/landing/Features";
+import { PainPoints } from "@/components/landing/PainPoints";
+import { Solution } from "@/components/landing/Solution";
+// import { Features } from "@/components/landing/Features"; // Removed
+import { SocialProof } from "@/components/landing/SocialProof";
+import { CTA } from "@/components/landing/CTA";
 
 export default function Home() {
   return (
@@ -9,7 +15,10 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <Features />
+        <PainPoints />
+        <Solution />
+        <SocialProof />
+        <CTA />
       </main>
       <Footer />
     </div>
