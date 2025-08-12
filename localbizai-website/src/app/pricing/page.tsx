@@ -5,7 +5,7 @@ const tiers = [
   {
     name: 'Starter',
     price: '$29',
-    description: 'Perfect for solo entrepreneurs',
+    description: 'Ideal for solo entrepreneurs launching their AI journey.',
     features: [
       'Basic AI chat assistant',
       'Automated follow-ups',
@@ -15,7 +15,7 @@ const tiers = [
   {
     name: 'Professional',
     price: '$99',
-    description: 'For growing businesses',
+    description: 'Designed for growing businesses ready to scale with AI.',
     features: [
       'Everything in Starter',
       'Financial forecasting',
@@ -26,7 +26,7 @@ const tiers = [
   {
     name: 'Enterprise',
     price: '$299',
-    description: 'For established operations',
+    description: 'Tailored for established operations seeking comprehensive AI solutions.',
     features: [
       'Everything in Professional',
       'Custom AI training',
@@ -41,15 +41,14 @@ export default function PricingPage() {
     <div className="bg-white">
       <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
-          <h1 className="text-base font-semibold leading-7 text-indigo-600">Pricing</h1>
-          <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-            Pricing plans for teams of all sizes
+          <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+            Flexible Pricing Plans for Every Business Size
+          </h1>
+          <p className="mt-2 text-lg leading-8 text-gray-600">
+            Start with a 1-week free trial of our Starter plan!
           </p>
         </div>
-        <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600">
-          Choose an affordable plan that’s packed with the best features for engaging your audience, creating customer loyalty, and driving sales.
-        </p>
-        <div className="isolate mx-auto mt-16 grid max-w-md grid-cols-1 gap-y-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+        <div className="isolate mx-auto mt-16 grid max_w-md grid-cols-1 gap-y-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {tiers.map((tier, tierIdx) => (
             <div
               key={tier.name}

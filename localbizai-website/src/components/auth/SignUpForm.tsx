@@ -18,9 +18,12 @@ import {
 } from '@/components/ui/Form';
 import { Input } from '@/components/ui/Input';
 
+import { useRouter } from 'next/navigation';
+
 const formSchema = signUpSchema;
 
 export function SignUpForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,8 +37,8 @@ export function SignUpForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       await signUpWithEmailAndPassword(values.email, values.password, values.businessName);
-      // Handle successful sign up, e.g., redirect to dashboard
       console.log('Signed up successfully');
+      router.push('/hello');
     } catch (error) {
       // Handle error
       console.error(error);
@@ -43,10 +46,11 @@ export function SignUpForm() {
   }
 
   const handleGoogleSignIn = async () => {
+    form.clearErrors(); // Clear any existing form errors
     try {
       await signInWithGoogle();
-      // Handle successful sign in, e.g., redirect to dashboard
       console.log('Signed in with Google successfully');
+      router.push('/hello');
     } catch (error) {
       // Handle error
       console.error(error);
