@@ -49,22 +49,22 @@ export function Features() {
   ];
 
   return (
-    <section className="py-24 bg-gradient-to-b from-white via-gray-50 to-white relative overflow-hidden">
+    <section className="py-24 bg-gradient-to-b from-green-50 via-white to-green-50 relative overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute inset-0 bg-grid-gray-100 bg-grid-16 opacity-40"></div>
-      <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+      <div className="absolute inset-0 bg-grid-green-100 bg-grid-16 opacity-40"></div>
+      <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-green-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-20">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-medium mb-4">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-50 border border-green-200 text-green-700 text-sm font-medium mb-4">
             <Sparkles className="w-4 h-4 mr-2" />
             Powerful AI Features
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
             AI Tools That Actually
-            <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"> Transform</span> Your Business
+            <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent"> Transform</span> Your Business
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Stop juggling dozens of disconnected tools. Our integrated AI platform delivers everything you need to scale your business intelligently.
@@ -78,7 +78,7 @@ export function Features() {
             return (
               <div 
                 key={index}
-                className="group relative bg-white/80 backdrop-blur-sm p-8 rounded-2xl border border-gray-200/50 shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 hover:-translate-y-2"
+                className="group relative bg-white/80 backdrop-blur-sm p-8 rounded-2xl border border-gray-200/50 shadow-sm hover:shadow-2xl hover:shadow-green-500/10 transition-all duration-500 hover:-translate-y-2"
                 style={{ animationDelay: `${feature.delay}ms` }}
               >
                 {/* Icon with gradient background */}
@@ -89,10 +89,10 @@ export function Features() {
                 {/* Content */}
                 <div className="space-y-4">
                   <div className="flex items-start justify-between">
-                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-green-600 transition-colors">
                       {feature.title}
                     </h3>
-                    <ArrowUpRight className="w-5 h-5 text-gray-400 group-hover:text-indigo-600 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+                    <ArrowUpRight className="w-5 h-5 text-gray-400 group-hover:text-green-600 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
                   </div>
                   <p className="text-gray-600 leading-relaxed">
                     {feature.description}
@@ -100,10 +100,10 @@ export function Features() {
                 </div>
 
                 {/* Hover effect border */}
-                <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-indigo-200 transition-all duration-300"></div>
+                <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-green-200 transition-all duration-300"></div>
                 
                 {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity duration-300 bg-gradient-to-r from-indigo-600 to-purple-600"></div>
+                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-5 transition-opacity duration-300 bg-gradient-to-r from-green-600 to-emerald-600"></div>
               </div>
             );
           })}

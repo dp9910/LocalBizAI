@@ -1,5 +1,6 @@
 
 import { Search, Brain, Rocket, TrendingUp, CheckCircle, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export function Solution() {
   const steps = [
@@ -50,7 +51,7 @@ export function Solution() {
             <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent"> AI Success</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Stop guessing. Stop failing. Follow our proven 4-step methodology that has helped hundreds of businesses achieve AI success.
+            Our systematic approach to AI implementation ensures your business gets real results, not empty promises.
           </p>
         </div>
 
@@ -120,12 +121,12 @@ export function Solution() {
               Ready to Start Your Journey?
             </h3>
             <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              Join hundreds of successful businesses who've transformed their operations with our proven methodology.
+              Ready to take the next step? Let's discuss how this approach can work for your specific business needs.
             </p>
-            <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold hover:shadow-lg hover:shadow-green-500/25 transition-all duration-300 cursor-pointer group">
+            <Link href="/assessment" className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold hover:shadow-lg hover:shadow-green-500/25 transition-all duration-300 cursor-pointer group">
               <span>Begin Discovery Process</span>
               <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-all duration-300" />
-            </div>
+            </Link>
           </div>
         </div>
       </div>

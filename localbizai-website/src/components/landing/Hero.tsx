@@ -5,21 +5,24 @@ import Image from "next/image";
 
 export function Hero() {
   return (
-    <div className="bg-white flex items-center justify-center py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div className="bg-gradient-to-b from-green-50 via-white to-green-50 flex items-center justify-center py-12 relative overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-green-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+      
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="space-y-8">
           {/* Main heading */}
           <div className="space-y-6">
             <h1 className="text-5xl md:text-7xl font-black text-gray-900 leading-tight tracking-tight">
-              The Business Partner
-              <br />
               <span className="relative">
-                Every Entrepreneur
-                <span className="absolute -bottom-2 left-0 w-full h-6 bg-yellow-300 -z-10 transform -skew-y-1"></span>
+                AI for Local Business
+                <span className="absolute -bottom-2 left-0 w-full h-6 bg-green-300 -z-10 transform -skew-y-1"></span>
               </span>
-              <br />
-              Deserves
             </h1>
+            <p className="text-xl md:text-2xl text-gray-600 font-medium max-w-3xl mx-auto">
+              We handle the AI chaos, so you can handle what matters.
+            </p>
           </div>
           
           {/* Timeline visual */}
@@ -29,7 +32,7 @@ export function Hero() {
               alt="AI Implementation Timeline" 
               width={900} 
               height={450} 
-              className="object-cover rounded-2xl shadow-2xl mx-auto border-8 border-white"
+              className="object-cover rounded-2xl shadow-2xl mx-auto border-8 border-green-50"
             />
           </div>
         </div>

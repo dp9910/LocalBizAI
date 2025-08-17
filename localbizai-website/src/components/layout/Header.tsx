@@ -11,13 +11,9 @@ export function Header() {
           <h2 className="text-[#0d141c] text-xl font-bold leading-tight tracking-[-0.015em]">LocalBizAI</h2>
         </Link>
       </div>
-      <div className="flex flex-1 justify-end gap-8">
-        <div className="flex items-center gap-9">
-          <Link className="text-[#0d141c] text-sm font-medium leading-normal" href="/pricing">Pricing</Link>
-          <Link className="text-[#0d141c] text-sm font-medium leading-normal" href="/blog">Blog</Link>
-        </div>
+      <div className="flex flex-1 justify-end">
         <Button asChild>
-          <Link href="/auth/signup">Get Started</Link>
+          <Link href="/assessment">Get Started</Link>
         </Button>
       </div>
     </header>

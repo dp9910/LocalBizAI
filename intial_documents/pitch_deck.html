@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalBizAI - The AI Business Partner Every Entrepreneur Needs</title>
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #4ecdc4;
+            --danger-color: #ff6b6b;
+            --dark-text: #1a1a2e;
+            --body-text: #2d3748;
+            --light-bg: #f7fafc;
+            --warm-orange: #ff8a65;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            overflow-x: hidden;
+        }
+
+        .slide-container {
+            display: none;
+            min-height: 100vh;
+            padding: 40px;
+            position: relative;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide {
+            background: white;
+            border-radius: 24px;
+            padding: 50px 60px;
+            max-width: 1200px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .slide h1 {
+            font-size: 3.8rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .slide h2 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .slide h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 20px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: var(--body-text);
+            margin-bottom: 20px;
+        }
+        
+        .tagline {
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            text-align: center;
+            font-weight: 500;
+            margin-bottom: 40px;
+        }
+        
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .stat-tile {
+            background: var(--light-bg);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            border-left: 5px solid var(--danger-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .stat-tile.opportunity {
+             border-left-color: var(--accent-color);
+        }
+
+        .stat-tile.human-story {
+             border-left-color: var(--warm-orange);
+             background: #fff8f0;
+        }
+        
+        .stat-tile h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 15px;
+        }
+        
+        .stat-tile p {
+            font-size: 1.1rem;
+        }
+        
+        .stat-tile .source-link {
+            font-size: 0.85rem;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            display: inline-block;
+        }
+        .stat-tile .source-link:hover {
+            text-decoration: underline;
+        }
+
+        .key-insight-box {
+            background: #e9eafc;
+            border: 2px solid var(--primary-color);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .key-insight-box p {
+            font-size: 1.4rem;
+            color: var(--dark-text);
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .divider-line {
+            width: 80%;
+            height: 2px;
+            background-color: #e2e8f0;
+            margin: 40px auto;
+        }
+
+        .human-moment {
+            background: linear-gradient(135deg, #fff8f0 0%, #ffe0b3 100%);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px 0;
+            border: 2px solid var(--warm-orange);
+        }
+
+        .navigation {
+            position: fixed !important;
+            bottom: 20px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            display: flex !important;
+            gap: 20px;
+            z-index: 99999 !important;
+            background: rgba(0, 0, 0, 0.8) !important;
+            padding: 15px 25px !important;
+            border-radius: 50px !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .nav-btn {
+            background: #667eea !important;
+            border: none !important;
+            padding: 12px 20px !important;
+            border-radius: 25px !important;
+            cursor: pointer !important;
+            font-weight: 600 !important;
+            color: white !important;
+            font-size: 14px !important;
+            min-width: 100px !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .nav-btn:hover {
+            background: #5a6fd8 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            color: var(--primary-color);
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .slide { padding: 30px; }
+            .slide h1 { font-size: 2.5rem; }
+            .slide h2 { font-size: 2rem; }
+        }
+    </style>
+    
+    <script>
+        let currentSlide = 0;
+        let slides = [];
+        let totalSlides = 0;
+
+        function navigateSlide(direction) {
+            currentSlide = currentSlide + direction;
+            
+            if (currentSlide >= totalSlides) {
+                currentSlide = 0;
+            } else if (currentSlide < 0) {
+                currentSlide = totalSlides - 1;
+            }
+            
+            showSlide(currentSlide);
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                slide.style.display = 'none';
+            });
+            
+            if (slides[index]) {
+                slides[index].classList.add('active');
+                slides[index].style.display = 'flex';
+            }
+            
+            if (document.getElementById('current-slide')) {
+                document.getElementById('current-slide').textContent = index + 1;
+            }
+        }
+
+        function initSlideShow() {
+            slides = document.querySelectorAll('.slide-container');
+            totalSlides = slides.length;
+            
+            if (document.getElementById('total-slides')) {
+                document.getElementById('total-slides').textContent = totalSlides;
+            }
+            
+            showSlide(0);
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSlideShow);
+        } else {
+            initSlideShow();
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                navigateSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                navigateSlide(-1);
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">10</span>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="navigateSlide(-1)">← Previous</button>
+        <button class="nav-btn" onclick="navigateSlide(1)">Next →</button>
+    </div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide-container active">
+        <div class="slide">
+            <h1>LocalBizAI</h1>
+            <p class="tagline">The Business Partner Every Entrepreneur Deserves</p>
+            <div style="text-align: center; margin-top: 40px;">
+                <p style="font-size: 1.5rem; color: #2d3748; margin-bottom: 20px; font-weight: 700;">
+                    Small business AI adoption jumped from 51% to 68% in just two years.
+                </p>
+                <p style="font-size: 1.3rem; color: #667eea; font-weight: 500; margin-bottom: 20px;">
+                    But nearly half still struggle with successful deployment.
+                </p>
+                <p style="font-size: 1.2rem; color: #764ba2; font-weight: 600;">
+                    We turn AI chaos into business growth.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: The New AI Economy -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2 style="margin-bottom: 20px;">The New AI Economy: A Tale of Two Worlds</h2>
+            <p style="text-align:center; max-width: 800px; margin: 0 auto 30px;">Big Tech is in an AI gold rush, creating a new industrial revolution. But this revolution is creating a widening gap, leaving the backbone of our economy behind.</p>
+            
+            <h3 style="text-align:center; color: var(--accent-color);">World #1: The Tech Giants</h3>
+            <div class="stat-grid">
+                <div class="stat-tile opportunity">
+                    <h4>+629% Revenue Growth</h4>
+                    <p>NVIDIA's data center revenue—driven entirely by AI chip sales—has exploded, showcasing the astronomical financial gains from powering the AI revolution.</p>
+                    <a href="https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2024" target="_blank" class="source-link">Source: NVIDIA Q4 2024 Earnings</a>
+                </div>
+                <div class="stat-tile opportunity">
+                    <h4>77% Faster Work</h4>
+                    <p>Early Microsoft 365 Copilot users complete tasks like writing, summarizing, and searching faster and with higher quality, demonstrating massive productivity gains.</p>
+                    <a href="https://www.microsoft.com/en-us/worklab/work-trend-index/copilot-early-findings" target="_blank" class="source-link">Source: Microsoft Work Trend Index</a>
+                </div>
+            </div>
+
+            <div class="divider-line"></div>
+            
+            <h3 style="text-align:center; color: var(--danger-color);">World #2: Main Street Gets Left Behind</h3>
+            <p style="text-align:center; max-width: 900px; margin: 20px auto 0; font-size: 1.3rem; color: var(--body-text);">While tech giants race ahead, small businesses are stuck at the starting line—drowning in choices, lacking expertise, and struggling with basics.</p>
+
+            <div class="stat-grid" style="margin-top:40px;">
+                <div class="stat-tile">
+                    <h4 style="font-size: 2.2rem; text-align: center; margin-bottom: 10px;">42%</h4>
+                    <p style="text-align: center; font-size: 1.3rem;"><strong>Lack Resources & Expertise</strong><br>Don't have what they need to deploy AI successfully</p>
+                    <a href="https://www.foxbusiness.com/economy/small-business-ai-adoption-jumps-68-owners-plan-significant-workforce-growth-2025" target="_blank" class="source-link">Source: Goldman Sachs 10,000 Small Businesses 2025</a>
+                </div>
+                <div class="stat-tile">
+                    <h4 style="font-size: 2.2rem; text-align: center; margin-bottom: 10px;">48%</h4>
+                    <p style="text-align: center; font-size: 1.3rem;"><strong>Struggling to Choose Tools</strong><br>Overwhelmed by endless AI options</p>
+                    <a href="https://www.foxbusiness.com/economy/small-business-ai-adoption-jumps-68-owners-plan-significant-workforce-growth-2025" target="_blank" class="source-link">Source: Goldman Sachs 10,000 Small Businesses 2025</a>
+                </div>
+                <div class="stat-tile">
+                    <h4 style="font-size: 2.2rem; text-align: center; margin-bottom: 10px;">46%</h4>
+                    <p style="text-align: center; font-size: 1.3rem;"><strong>Worry About Data Security</strong><br>Fear of privacy breaches and cyber risks</p>
+                    <a href="https://www.foxbusiness.com/economy/small-business-ai-adoption-jumps-68-owners-plan-significant-workforce-growth-2025" target="_blank" class="source-link">Source: Goldman Sachs 10,000 Small Businesses 2025</a>
+                </div>
+            </div>
+
+            <div class="human-moment" style="margin-top: 40px; background: linear-gradient(135deg, #fff8f0 0%, #ffebee 100%); border-color: var(--warm-orange);">
+                <p style="text-align: center; font-size: 1.4rem; margin-bottom: 0; color: var(--dark-text); font-weight: 600;">
+                    Main Street entrepreneurs—the heart of our economy—are stuck fighting tomorrow's war with yesterday's weapons.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: The Tool Chaos Problem -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>Small Businesses Are Drowning in AI Tool Chaos</h2>
+            <p style="text-align:center; max-width: 800px; margin: 0 auto 40px; font-size: 1.3rem; color: var(--body-text);">"There are so many AI tools now... but not actually checking if they're the best/right tools for your business."</p>
+            
+            <div class="stat-grid" style="margin-top: 40px;">
+                <div class="stat-tile">
+                    <h4 style="font-size: 2.2rem; text-align: center; margin-bottom: 10px;">35+</h4>
+                    <p style="text-align: center; font-size: 1.3rem;"><strong>AI Tools Recommended for Small Business</strong><br>Just ONE blog post lists this many</p>
+                    <p style="text-align: center; font-size: 1rem; color: var(--body-text); margin-top: 10px;">Ada, Forethought, ThoughtSpot, Qlik, Midjourney, Adobe Firefly, Jasper, Shown, Albert, Dataiku, Stock Perfect, EcoReturns, ReConvert...</p>
+                    <a href="https://www.shopify.com/blog/ai-for-small-business" target="_blank" class="source-link">Source: Shopify - AI for Small Business 2025</a>
+                </div>
+                <div class="stat-tile">
+                    <h4 style="font-size: 2.2rem; text-align: center; margin-bottom: 10px;">77%</h4>
+                    <p style="text-align: center; font-size: 1.3rem;"><strong>Don't Trust AI in Business</strong><br>Americans express real concerns</p>
+                    <p style="text-align: center; font-size: 1rem; color: var(--body-text); margin-top: 10px;">People are scared of AI but businesses keep pushing more tools without guidance.</p>
+                    <a href="https://www.shopify.com/blog/ai-for-small-business" target="_blank" class="source-link">Source: Gallup Poll via Shopify 2025</a>
+                </div>
+                <div class="stat-tile">
+                    <h4 style="font-size: 2.2rem; text-align: center; margin-bottom: 10px;">$1000s</h4>
+                    <p style="text-align: center; font-size: 1.3rem;"><strong>Wasted on Wrong Tools</strong><br>Paying separately for everything</p>
+                    <p style="text-align: center; font-size: 1rem; color: var(--body-text); margin-top: 10px;">"You need to pay separately for different tools" without knowing if they'll work together.</p>
+                    <a href="https://www.reddit.com/r/AiForSmallBusiness/comments/1jgcmqm/so_many_ai_tools_out_there_how_to_choose/" target="_blank" class="source-link">Source: Reddit - AI for Small Business</a>
+                </div>
+            </div>
+
+            <div class="stat-grid" style="margin-top: 40px;">
+                <div class="stat-tile human-story">
+                    <h4>💬 "This question is too vague"</h4>
+                    <p><strong>Every entrepreneur asking for help gets overwhelmed by options.</strong> "What type of productivity are you trying to fix?" - even getting started requires knowing exactly what you need.</p>
+                    <a href="https://www.reddit.com/r/Entrepreneur/comments/ai_tools_productivity/" target="_blank" class="source-link">Source: Reddit - Entrepreneur</a>
+                </div>
+                <div class="stat-tile human-story">
+                    <h4>💬 "Haven't done much for me past ChatGPT"</h4>
+                    <p><strong>Paying for specialized tools that don't add value.</strong> "A lot of the more specialized tools I've tried haven't done much for me past what ChatGPT can do."</p>
+                    <a href="https://www.reddit.com/r/Entrepreneur/comments/ai_tools_productivity/" target="_blank" class="source-link">Source: Reddit - Entrepreneur</a>
+                </div>
+                <div class="stat-tile human-story">
+                    <h4>💬 "Major problem is discoverability"</h4>
+                    <p><strong>Can't find what actually works for their business.</strong> "The major problem we have seen is the discoverability of AI tools" - endless options, no clear path.</p>
+                    <a href="https://www.reddit.com/r/AiForSmallBusiness/comments/1jgcmqm/so_many_ai_tools_out_there_how_to_choose/" target="_blank" class="source-link">Source: Reddit - AI for Small Business</a>
+                </div>
+            </div>
+
+            <div class="key-insight-box" style="margin-top: 40px;">
+                <p>The market doesn't need another AI tool. It needs someone to solve the chaos with one platform that actually works for real businesses.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: AI Backfiring -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>Generic AI Tools Are Backfiring for Small Business</h2>
+            <p style="text-align:center; max-width: 800px; margin: 0 auto 40px; font-size: 1.3rem; color: var(--body-text);">Without proper guidance, AI shortcuts become expensive disasters. Real businesses are paying the price for rushing into AI without expertise.</p>
+            
+            <div class="stat-grid" style="margin-top: 40px;">
+                <div class="stat-tile">
+                    <h4 style="font-size: 2.2rem; text-align: center; margin-bottom: 10px;">$485</h4>
+                    <p style="text-align: center; font-size: 1.3rem;"><strong>Website Repair Bill</strong><br>AI code crashed site for 3 days</p>
+                    <p style="text-align: center; font-size: 1rem; color: var(--body-text); margin-top: 10px;">Client used ChatGPT to update event page. More than hiring a pro from the start.</p>
+                    <a href="https://www.searchenginejournal.com/relying-too-much-on-ai-is-backfiring-for-businesses/550600/" target="_blank" class="source-link">Source: Search Engine Journal via BBC 2025</a>
+                </div>
+                <div class="stat-tile">
+                    <h4 style="font-size: 2.2rem; text-align: center; margin-bottom: 10px;">90%</h4>
+                    <p style="text-align: center; font-size: 1.3rem;"><strong>Of Writer's Work</strong><br>Now editing AI content that "falls flat"</p>
+                    <p style="text-align: center; font-size: 1rem; color: var(--body-text); margin-top: 10px;">Professional writers spending most time fixing "vanilla" AI copy that doesn't sell.</p>
+                    <a href="https://www.searchenginejournal.com/relying-too-much-on-ai-is-backfiring-for-businesses/550600/" target="_blank" class="source-link">Source: Search Engine Journal via BBC 2025</a>
+                </div>
+                <div class="stat-tile">
+                    <h4 style="font-size: 2.2rem; text-align: center; margin-bottom: 10px;">97%</h4>
+                    <p style="text-align: center; font-size: 1.3rem;"><strong>Saw No Measurable Changes</strong><br>In earnings, hours worked, or satisfaction</p>
+                    <p style="text-align: center; font-size: 1rem; color: var(--body-text); margin-top: 10px;">Danish research: Real-world AI use delivers almost no productivity gains.</p>
+                    <a href="https://www.searchenginejournal.com/relying-too-much-on-ai-is-backfiring-for-businesses/550600/" target="_blank" class="source-link">Source: Danish Research via Search Engine Journal 2025</a>
+                </div>
+            </div>
+            
+            <div class="key-insight-box" style="margin-top: 60px;">
+                <p>"Rushed adoption may save time upfront, but it leads to more expensive problems down the line. The cost of fixing AI mistakes can quickly outweigh the perceived savings."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Use AI or Die -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>AI Adoption Is Now Business Critical</h2>
+            <p style="text-align:center; max-width: 800px; margin: 0 auto 40px; font-size: 1.3rem; color: var(--body-text);">Small businesses face a strategic choice: adopt AI successfully or lose market position to competitors who do.</p>
+            
+            <div class="stat-grid" style="margin-top: 40px;">
+                <div class="stat-tile">
+                    <h4 style="font-size: 2.2rem; text-align: center; margin-bottom: 10px;">41%</h4>
+                    <p style="text-align: center; font-size: 1.3rem;"><strong>Believe Non-Adopters Won't Remain Competitive</strong><br>Business survival linked to AI adoption</p>
+                    <p style="text-align: center; font-size: 1rem; color: var(--body-text); margin-top: 10px;">Small business leaders see AI adoption as a competitive necessity, not an option.</p>
+                    <a href="https://fox2now.com/business/press-releases/ein-presswire/827978882/ai-readiness-divide-revealed-small-businesses-at-risk-of-being-left-behind/" target="_blank" class="source-link">Source: Institute of Coding Survey 2025</a>
+                </div>
+                <div class="stat-tile opportunity">
+                    <h4 style="font-size: 2.2rem; text-align: center; margin-bottom: 10px;">74%</h4>
+                    <p style="text-align: center; font-size: 1.3rem;"><strong>AI Users Plan Business Growth</strong><br>vs 65% of non-users</p>
+                    <p style="text-align: center; font-size: 1rem; color: var(--body-text); margin-top: 10px;">AI adopters are 40% more likely to expand operations and create new jobs.</p>
+                    <a href="https://www.foxbusiness.com/economy/small-business-ai-adoption-jumps-68-owners-plan-significant-workforce-growth-2025" target="_blank" class="source-link">Source: Goldman Sachs 10,000 Small Businesses 2025</a>
+                </div>
+                <div class="stat-tile">
+                    <h4 style="font-size: 2.2rem; text-align: center; margin-bottom: 10px;">37%</h4>
+                    <p style="text-align: center; font-size: 1.3rem;"><strong>Are Actually AI Ready</strong><br>Most lack implementation capability</p>
+                    <p style="text-align: center; font-size: 1rem; color: var(--body-text); margin-top: 10px;">Significant readiness gap between AI necessity and deployment capability.</p>
+                    <a href="https://fox2now.com/business/press-releases/ein-presswire/827978882/ai-readiness-divide-revealed-small-businesses-at-risk-of-being-left-behind/" target="_blank" class="source-link">Source: Institute of Coding Survey 2025</a>
+                </div>
+            </div>
+            
+            <div class="key-insight-box" style="margin-top: 60px;">
+                <p>Market reality: AI adoption creates competitive advantage. Successful implementation requires addressing the capability gap, not just tool access.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Solo Revolution -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>The Solo Economy Presents Significant Market Opportunity</h2>
+            <p style="text-align:center; max-width: 800px; margin: 0 auto 40px; font-size: 1.3rem; color: var(--body-text);">Workforce automation is driving independent work growth, creating demand for integrated business infrastructure solutions tailored to solo operations.</p>
+            
+            <div class="stat-grid" style="margin-top: 40px;">
+                <div class="stat-tile opportunity">
+                    <h4 style="font-size: 2.2rem; text-align: center; margin-bottom: 10px;">72M</h4>
+                    <p style="text-align: center; font-size: 1.3rem;"><strong>Americans in Solo Work</strong><br>Freelance market reached $556.7B in 2024</p>
+                    <p style="text-align: center; font-size: 1rem; color: var(--body-text); margin-top: 10px;">Market projected to reach $1.8T by 2032, driven by technology adoption and workforce shifts.</p>
+                    <a href="https://www.foxbusiness.com/economy/small-business-ai-adoption-jumps-68-owners-plan-significant-workforce-growth-2025" target="_blank" class="source-link">Source: MBO Partners 2024</a>
+                </div>
+                <div class="stat-tile opportunity">
+                    <h4 style="font-size: 2.2rem; text-align: center; margin-bottom: 10px;">4.7M</h4>
+                    <p style="text-align: center; font-size: 1.3rem;"><strong>High-Earning Solo Workers</strong><br>Earning $100K+ annually</p>
+                    <p style="text-align: center; font-size: 1rem; color: var(--body-text); margin-top: 10px;">57% increase from 3M since 2020. 59% plan to hire operational support services.</p>
+                    <a href="https://www.chase.com/business/knowledge-center/manage/blo-pulse-24" target="_blank" class="source-link">Source: QuickBooks Survey 2024</a>
+                </div>
+                <div class="stat-tile">
+                    <h4 style="font-size: 2.2rem; text-align: center; margin-bottom: 10px;">36%</h4>
+                    <p style="text-align: center; font-size: 1.3rem;"><strong>Time on Administrative Tasks</strong><br>Non-revenue generating activities</p>
+                    <p style="text-align: center; font-size: 1rem; color: var(--body-text); margin-top: 10px;">25 hours weekly on compliance, data entry, and business administration processes.</p>
+                    <a href="https://blog.rescuetime.com/how-to-be-more-productive-with-time-tracking-software/" target="_blank" class="source-link">Source: Time etc Survey (251 entrepreneurs)</a>
+                </div>
+            </div>
+            
+            <div class="key-insight-box" style="margin-top: 60px;">
+                <p>Market opportunity: Growing cohort of high-value solo entrepreneurs requires scalable business infrastructure solutions, particularly in administrative automation and compliance management.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: LocalBizAI Solution -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>LocalBizAI: Integrated Business Infrastructure Platform</h2>
+            <p style="text-align: center; font-size: 1.3rem; max-width: 900px; margin: 0 auto 40px;">We provide comprehensive business automation solutions that address documented market gaps in AI implementation and small business operational efficiency.</p>
+             <div class="stat-grid">
+                <div class="stat-tile opportunity">
+                    <h4>🚀 For New Business Formation</h4>
+                    <p><strong>Streamlined compliance and setup processes.</strong> Automated state-specific LLC formation, regulatory compliance tracking, and business registration workflows reduce formation complexity and time-to-market.</p>
+                </div>
+                <div class="stat-tile opportunity">
+                    <h4>🏪 For Established Operations</h4>
+                    <p><strong>Unified business management platform.</strong> Integrated customer service, scheduling, invoicing, and marketing automation replaces multiple disparate SaaS subscriptions with single-platform efficiency.</p>
+                </div>
+                 <div class="stat-tile opportunity">
+                    <h4>👤 For Solo Professionals</h4>
+                    <p><strong>Administrative task automation.</strong> Automated client communications, appointment management, and business reporting reduce non-billable time allocation from 36% to enable focus on core revenue activities.</p>
+                </div>
+            </div>
+
+            <div class="stat-grid" style="margin-top: 30px;">
+                <div class="stat-tile human-story" style="grid-column: 1 / -1;">
+                    <h4>Platform Differentiation: Addressing Implementation Gaps</h4>
+                    <p><strong>Challenge:</strong> Generic AI produces low-quality outputs requiring extensive revision (20+ hours documented). <strong>Solution:</strong> Industry-specific AI models trained on business context, location, and customer data.</p>
+                    <p><strong>Challenge:</strong> AI implementation failures create significant repair costs ($485 average). <strong>Solution:</strong> Guided deployment with integrated safety protocols and rollback capabilities.</p>
+                    <p><strong>Challenge:</strong> 48% struggle with tool selection and integration complexity. <strong>Solution:</strong> Unified platform architecture eliminates multi-vendor integration challenges.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: AI Tools That Actually Help -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>AI Tools That Actually Help Your Business</h2>
+            <p style="text-align: center; font-size: 1.3rem; max-width: 900px; margin: 0 auto 40px;">Instead of generic AI that gives "vanilla" results, here are the specific tools LocalBizAI provides to solve real business problems.</p>
+             <div class="stat-grid">
+                <div class="stat-tile opportunity">
+                    <h4>🤖 Smart Chat Assistant</h4>
+                    <p><strong>Handle bookings and questions 24/7</strong> - customers don't wait for callbacks. Reduces missed opportunities and improves customer satisfaction.</p>
+                </div>
+                <div class="stat-tile opportunity">
+                    <h4>📅 Automated Follow-ups</h4>
+                    <p><strong>Reduce no-shows with smart reminders</strong> and convert missed website visitors into customers. Automatically nurture leads while you focus on service.</p>
+                </div>
+                 <div class="stat-tile opportunity">
+                    <h4>📊 Financial Forecasting</h4>
+                    <p><strong>Analyze cash flow, predict busy seasons</strong> - make data-driven financial decisions without hiring an accountant or analyst.</p>
+                </div>
+            </div>
+
+            <div class="stat-grid" style="margin-top: 30px;">
+                <div class="stat-tile opportunity">
+                    <h4>🍽️ Menu & Inventory Optimizer</h4>
+                    <p><strong>Restaurants & retail:</strong> Optimize layouts and ordering patterns based on customer behavior and sales data to maximize revenue per customer.</p>
+                </div>
+                <div class="stat-tile opportunity">
+                    <h4>🔒 Business Security Monitor</h4>
+                    <p><strong>AI-powered cybersecurity for small businesses</strong> - protect customer data and business information without needing a dedicated IT team.</p>
+                </div>
+                <div class="stat-tile opportunity">
+                    <h4>⚖️ Compliance Assistant</h4>
+                    <p><strong>Navigate regulations, permits, legal documents</strong> - especially crucial for new business owners who don't know where to start with requirements.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Your Guided Journey to AI Success -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>Your Guided Journey to AI Success</h2>
+            <p style="text-align:center; max-width: 900px; margin: 0 auto 40px;">Unlike other AI companies that dump tools and walk away, LocalBizAI guides you through every step of transformation. Here's exactly how we ensure your success:</p>
+            
+            <!-- Timeline Container -->
+            <div style="position: relative; max-width: 1000px; margin: 40px auto;">
+                <!-- Vertical Timeline Line -->
+                <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 4px; background: linear-gradient(to bottom, var(--primary-color), var(--accent-color)); transform: translateX(-50%);"></div>
+                
+                <!-- Step 1 -->
+                <div style="display: flex; align-items: center; margin-bottom: 60px; position: relative;">
+                    <div style="flex: 1; text-align: right; padding-right: 40px;">
+                        <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border: 2px solid var(--primary-color);">
+                            <h4 style="color: var(--primary-color); font-size: 1.4rem; margin-bottom: 10px;">📋 Step 1: Business Discovery</h4>
+                            <p style="margin: 0; font-size: 1.1rem;">We learn your industry, location, customer base, current tools, and pain points. No generic solutions—everything starts with understanding YOUR business.</p>
+                        </div>
+                    </div>
+                    <div style="position: absolute; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; background: var(--primary-color); border-radius: 50%; border: 4px solid white; box-shadow: 0 0 0 4px var(--primary-color);"></div>
+                    <div style="flex: 1; padding-left: 40px;"></div>
+                </div>
+                
+                <!-- Step 2 -->
+                <div style="display: flex; align-items: center; margin-bottom: 60px; position: relative;">
+                    <div style="flex: 1; padding-right: 40px;"></div>
+                    <div style="position: absolute; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; background: var(--accent-color); border-radius: 50%; border: 4px solid white; box-shadow: 0 0 0 4px var(--accent-color);"></div>
+                    <div style="flex: 1; text-align: left; padding-left: 40px;">
+                        <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border: 2px solid var(--accent-color);">
+                            <h4 style="color: var(--accent-color); font-size: 1.4rem; margin-bottom: 10px;">🎯 Step 2: Custom Strategy Creation</h4>
+                            <p style="margin: 0; font-size: 1.1rem;">AI analyzes your data and creates a personalized implementation roadmap. We show you exactly which tools will impact your revenue and how to deploy them safely.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 3 -->
+                <div style="display: flex; align-items: center; margin-bottom: 60px; position: relative;">
+                    <div style="flex: 1; text-align: right; padding-right: 40px;">
+                        <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border: 2px solid var(--primary-color);">
+                            <h4 style="color: var(--primary-color); font-size: 1.4rem; margin-bottom: 10px;">🚀 Step 3: Guided Implementation</h4>
+                            <p style="margin: 0; font-size: 1.1rem;">Step-by-step deployment with safety checks, testing phases, and approval workflows. We prevent the $485 repair bills and 20+ hour content fixes.</p>
+                        </div>
+                    </div>
+                    <div style="position: absolute; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; background: var(--primary-color); border-radius: 50%; border: 4px solid white; box-shadow: 0 0 0 4px var(--primary-color);"></div>
+                    <div style="flex: 1; padding-left: 40px;"></div>
+                </div>
+                
+                <!-- Step 4 -->
+                <div style="display: flex; align-items: center; position: relative;">
+                    <div style="flex: 1; padding-right: 40px;"></div>
+                    <div style="position: absolute; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; background: var(--accent-color); border-radius: 50%; border: 4px solid white; box-shadow: 0 0 0 4px var(--accent-color);"></div>
+                    <div style="flex: 1; text-align: left; padding-left: 40px;">
+                        <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border: 2px solid var(--accent-color);">
+                            <h4 style="color: var(--accent-color); font-size: 1.4rem; margin-bottom: 10px;">🔄 Step 4: Continuous Optimization</h4>
+                            <p style="margin: 0; font-size: 1.1rem;">24/7 monitoring, performance analysis, and ongoing recommendations. Your AI gets smarter about your business every day.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contrast Section -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 60px;">
+                <div style="background: #ffebee; padding: 30px; border-radius: 15px; border: 2px solid var(--danger-color); text-align: center;">
+                    <h4 style="color: var(--danger-color); font-size: 1.4rem; margin-bottom: 15px;">❌ Other AI Companies</h4>
+                    <p style="font-size: 1.2rem; margin: 0; font-weight: 600;">"Here's the tool. Figure it out yourself"</p>
+                </div>
+                <div style="background: #e9eafc; padding: 30px; border-radius: 15px; border: 2px solid var(--primary-color); text-align: center;">
+                    <h4 style="color: var(--primary-color); font-size: 1.4rem; margin-bottom: 15px;">✅ LocalBizAI</h4>
+                    <p style="font-size: 1.2rem; margin: 0; font-weight: 600;">"Let's understand your business first, then build the perfect solution together."</p>
+                </div>
+            </div>
+
+            <div class="key-insight-box" style="margin-top: 40px;">
+                <p>The difference is guidance. We don't just sell you AI tools—we become your AI implementation partner, ensuring success every step of the way.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Comparison Table -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>AI Tool Built To Get Your Business Going</h2>
+            <table style="width: 100%; border-collapse: collapse; font-size: 1.1rem; margin-top: 30px;">
+                <thead>
+                    <tr style="background-color: var(--light-bg);">
+                        <th style="padding: 15px; text-align: left; border: 1px solid #e2e8f0;"></th>
+                        <th style="padding: 15px; text-align: center; border: 1px solid #e2e8f0; background-color: #e9eafc;">LocalBizAI</th>
+                        <th style="padding: 15px; text-align: center; border: 1px solid #e2e8f0;">Generic AI Tools</th>
+                        <th style="padding: 15px; text-align: center; border: 1px solid #e2e8f0;">Enterprise AI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0;"><strong>Setup Time</strong></td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center; background-color: var(--light-bg);">5 minutes guided setup</td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center;">Hours learning each tool</td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center;">Months of implementation</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0;"><strong>Target User</strong></td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center; background-color: var(--light-bg);">Business owners focused on customers</td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center;">Tech-savvy individuals</td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center;">Large companies with IT teams</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0;"><strong>What You Get</strong></td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center; background-color: var(--light-bg);">Everything integrated + business guidance</td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center;">Separate tools you connect yourself</td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center;">Powerful but complex</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0;"><strong>Monthly Cost</strong></td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center; background-color: var(--light-bg);"><strong>$29 - $299</strong></td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center;">$15-50 per app (need 8-12 apps)</td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center;"><strong>$500 - $5,000+</strong></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0;"><strong>Support</strong></td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center; background-color: var(--light-bg);">Human experts to guide you</td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center;">Documentation and forums</td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center;">Dedicated account managers</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0;"><strong>Success Rate</strong></td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center; background-color: var(--light-bg);">Built to prevent failures</td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center;">97% see no measurable gains</td>
+                        <td style="padding: 15px; border: 1px solid #e2e8f0; text-align: center;">High with proper resources</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="key-insight-box" style="margin-top: 40px;">
+                <p>The sweet spot: Enterprise-level AI capabilities with small business pricing and support. Finally, AI that works for the rest of us.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

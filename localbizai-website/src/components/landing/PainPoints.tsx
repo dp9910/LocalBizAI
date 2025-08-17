@@ -4,13 +4,6 @@ import { AlertTriangle, DollarSign, TrendingDown, HelpCircle } from "lucide-reac
 export function PainPoints() {
   const painPoints = [
     {
-      icon: HelpCircle,
-      stat: "35+",
-      title: "Tools in One Article",
-      quote: "Just choosing takes weeks",
-      gradient: "from-amber-500 to-orange-500"
-    },
-    {
       icon: DollarSign,
       stat: "$485",
       title: "Average Repair Costs",
@@ -34,27 +27,27 @@ export function PainPoints() {
   ];
 
   return (
-    <section className="py-24 bg-gradient-to-b from-red-50 via-white to-red-50 relative overflow-hidden">
+    <section className="py-24 bg-gradient-to-b from-green-50 via-white to-green-50 relative overflow-hidden">
       {/* Background elements */}
-      <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-red-100 rounded-full mix-blend-multiply filter blur-2xl opacity-30"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-orange-100 rounded-full mix-blend-multiply filter blur-2xl opacity-30"></div>
+      <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-green-100 rounded-full mix-blend-multiply filter blur-2xl opacity-30"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-emerald-100 rounded-full mix-blend-multiply filter blur-2xl opacity-30"></div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-red-50 border border-red-200 text-red-700 text-sm font-medium mb-4">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-50 border border-green-200 text-green-700 text-sm font-medium mb-4">
             <AlertTriangle className="w-4 h-4 mr-2" />
             The Problem
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
             The AI Tool
-            <span className="bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent"> Chaos</span> Killing Small Businesses
+            <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent"> Chaos</span> Killing Small Businesses
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             While big corporations have dedicated AI teams, small businesses are drowning in complexity and broken promises.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {painPoints.map((point, index) => {
             const IconComponent = point.icon;
             return (
@@ -91,16 +84,24 @@ export function PainPoints() {
           })}
         </div>
 
-        {/* Bottom message */}
-        <div className="text-center mt-16 p-8 bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl border border-red-100">
-          <p className="text-lg font-semibold text-gray-800 mb-2">
-            Sound familiar?
-          </p>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            You're not alone. 68% of small businesses adopted AI in the last two years, but nearly half are still struggling to see real results. 
-            <span className="font-semibold text-gray-800"> That changes today.</span>
-          </p>
+        {/* Tool Selection Paralysis Section */}
+        <div className="human-moment" style={{marginTop: '40px', padding: '30px', background: 'linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%)', border: '2px solid #f39c12', borderRadius: '20px'}}>
+          <h4 style={{textAlign: 'center', color: '#d68910', fontSize: '1.5rem', marginBottom: '20px'}}>🔍 The Real Problem: Tool Selection Paralysis</h4>
+          <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '20px'}}>
+            <div>
+              <p style={{fontSize: '1.1rem', marginBottom: '15px'}}><strong>Customer Service:</strong><br />Ada, Forethought, Intercom, Zendesk, Drift...</p>
+              <p style={{fontSize: '1.1rem', marginBottom: '15px'}}><strong>Marketing:</strong><br />Jasper, Shown, Albert, Copy.ai, Shopify Magic...</p>
+              <p style={{fontSize: '1.1rem', marginBottom: '0'}}><strong>Analytics:</strong><br />ThoughtSpot, Qlik, Tableau, Dataiku, Looker...</p>
+            </div>
+            <div>
+              <p style={{fontSize: '1.1rem', marginBottom: '15px'}}><strong>Operations:</strong><br />Stock Perfect, EcoReturns, Monday.com, Zapier...</p>
+              <p style={{fontSize: '1.1rem', marginBottom: '15px'}}><strong>Design:</strong><br />Midjourney, Adobe Firefly, Canva, Figma AI...</p>
+              <p style={{fontSize: '1.1rem', marginBottom: '0'}}><strong>Sales:</strong><br />ReConvert, HubSpot, Salesforce Einstein, Pipedrive...</p>
+            </div>
+          </div>
+          <p style={{textAlign: 'center', marginTop: '20px', fontSize: '1.2rem', fontWeight: '600', color: '#d68910'}}>How do you choose? How do they integrate? Who provides guidance?</p>
         </div>
+
       </div>
     </section>
   );
