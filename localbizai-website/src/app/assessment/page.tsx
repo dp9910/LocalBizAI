@@ -96,14 +96,14 @@ Keep the entire response under 400 words. Use simple language like you're talkin
   const parseGeminiResponse = (response: string) => {
     const sections = {
       step1: '',
-      step2: [],
+      step2: [] as string[],
       step3: '',
       step4: { thirtyDays: '', sixtyDays: '', ninetyDays: '' }
     };
 
     const lines = response.split('\n');
     let currentSection = '';
-    let step2Items = [];
+    let step2Items: string[] = [];
 
     for (const line of lines) {
       if (line.includes('STEP 1:')) {
