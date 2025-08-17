@@ -1,22 +1,16 @@
 'use client';
 
-import { useAuth, signOut } from '@/lib/auth';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 
 export default function DashboardPage() {
-  const user = useAuth();
-
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-white shadow-sm py-4 px-6">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-900">
-            Welcome, {user?.displayName || user?.email}!
+            Dashboard
           </h1>
-          <Button onClick={signOut} variant="outline">
-            Sign Out
-          </Button>
         </div>
       </header>
 
