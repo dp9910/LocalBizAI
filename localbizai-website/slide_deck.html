@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalBizAI - AI for Local Business</title>
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #4ecdc4;
+            --matcha-bg: #f0f4f0;
+            --matcha-light: #f8faf8;
+            --dark-text: #2d3748;
+            --light-text: #4a5568;
+            --border-color: #e2e8f0;
+            --highlight-bg: #e6fffa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--matcha-bg);
+            overflow-x: hidden;
+        }
+
+        .slide-container {
+            display: none;
+            min-height: 100vh;
+            padding: 40px;
+            position: relative;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .slide-container.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 60px;
+            max-width: 1200px;
+            width: 100%;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            border: 1px solid var(--border-color);
+            min-height: 700px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .slide h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.1;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .slide h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        .slide h2 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 30px;
+            text-align: center;
+            line-height: 1.2;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .slide h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: var(--primary-color);
+            border-radius: 1px;
+        }
+
+        .slide h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 15px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--light-text);
+            margin-bottom: 15px;
+        }
+
+        .tagline {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            text-align: center;
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 99999;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-btn {
+            background: var(--primary-color);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: white;
+            font-size: 13px;
+            min-width: 80px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-1px);
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+            z-index: 1000;
+            font-size: 14px;
+            border: 1px solid var(--border-color);
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+        }
+
+        .source-link {
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .source-link:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+                min-height: 600px;
+            }
+            .slide h1 { font-size: 2.4rem; }
+            .slide h2 { font-size: 1.8rem; }
+        }
+
+        /* --- Custom styles for Slide 5 --- */
+        .ai-system-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 40px; /* Space between top and middle rows */
+            align-items: center;
+            margin-top: 50px;
+            width: 100%;
+            max-width: 1100px; /* Limit width to keep elements from spreading too thin */
+            margin-left: auto;
+            margin-right: auto;
+            position: relative; /* For SVG positioning relative to this container */
+            padding-bottom: 30px; /* Ensure space for arrows */
+        }
+
+        .top-row-inputs {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .middle-row-process {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 30px; /* Space between top row and this row */
+        }
+
+        .info-box {
+            flex: 1;
+            text-align: center;
+            border-radius: 15px;
+            padding: 25px 15px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 220px; /* Ensure boxes are tall enough */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .info-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .dna-style {
+            background: var(--matcha-light);
+            border: 2px solid var(--primary-color);
+        }
+        .dna-style::before { background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%); }
+
+        .pulse-style {
+            background: white;
+            border: 2px solid var(--accent-color);
+        }
+        .pulse-style::before { background: linear-gradient(90deg, var(--accent-color) 0%, var(--secondary-color) 100%); }
+
+        .ai-base-style { /* Changed from ai-box to ai-base-box */
+            background: var(--highlight-bg);
+            border: 2px solid var(--secondary-color);
+        }
+        .ai-base-style::before { background: linear-gradient(90deg, var(--secondary-color) 0%, var(--primary-color) 100%); }
+
+
+        .ai-partner-style {
+            flex: none; /* Do not grow */
+            width: 50%; /* Adjust as needed */
+            max-width: 450px; /* Max width for central box */
+            background: var(--matcha-light);
+            border-radius: 20px;
+            padding: 35px 30px;
+            color: var(--dark-text);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border: 3px solid var(--accent-color);
+            min-height: 240px;
+        }
+        .ai-partner-style::before { background: linear-gradient(90deg, var(--accent-color) 0%, var(--primary-color) 100%); border-radius: 20px 20px 0 0; }
+
+
+        .plus-sign {
+            font-size: 2.5rem;
+            color: var(--light-text);
+            font-weight: 700;
+            padding: 0 10px;
+        }
+
+        .info-box .emoji {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .info-box .box-title { /* For h3 elements inside info-box */
+            color: var(--dark-text);
+            margin-bottom: 8px;
+            font-size: 1.4rem;
+        }
+
+        .info-box .box-subtitle { /* For p elements below title */
+            font-weight: 500;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--light-text);
+            text-align: left;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+        .info-box ul li { margin-bottom: 5px; }
+
+
+        .ai-partner-style .box-title {
+            font-size: 1.8rem;
+        }
+        .ai-partner-style .box-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .process-callout {
+            flex: 1; /* Allow to grow */
+            text-align: center;
+            background: var(--matcha-light);
+            border: 2px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            min-height: 180px; /* Match height of AI partner box roughly */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .input-callout {
+            margin-right: 30px; /* Space between input callout and AI partner */
+        }
+        .output-callout {
+            margin-left: 30px; /* Space between AI partner and output callout */
+        }
+
+        .process-callout .emoji {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--dark-text);
+        }
+        .process-callout .callout-title {
+            font-size: 1.1rem;
+            color: var(--dark-text);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .process-callout .callout-subtitle {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">10</span>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="navigateSlide(-1)">← Previous</button>
+        <button class="nav-btn" onclick="navigateSlide(1)">Next →</button>
+    </div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide-container active">
+        <div class="slide">
+            <div class="logo-section">
+                <img src="./public/logo.png" alt="LocalBizAI Logo" class="logo" style="width: 500px; height: auto; margin-bottom: 0px; object-fit: cover; object-position: top;">
+                <p class="tagline" style="font-weight: bold; margin-top: 10px;">AI for Local Business</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px; border-top: 2px solid var(--border-color); padding-top: 30px;">
+                <p style="font-size: 1.8rem; color: var(--dark-text); font-weight: bold; margin: 0;">
+                    We translate AI capabilities into business solutions you can actually use
+                </p>
+            </div>
+        </div>
+    </div>
+
+   
+    <!-- Slide 2: Meet K Hair Salon -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>Meet K Hair Salon: A Local Business Ready for AI</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; align-items: start; margin: 30px 0;">
+                <!-- K Hair Salon Image -->
+                <div style="text-align: center;">
+                    <div style="width: 200px; height: 200px; background: #f8f9fa; border: 3px solid var(--primary-color); border-radius: 15px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: #6c757d; overflow: hidden; position: relative;">
+                        <img src="./public/khair.jpg" alt="K Hair Salon" style="width: 90%; height: 90%; object-fit: cover; border-radius: 12px;">
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);"></div>
+                    </div>
+                    <h3 style="color: var(--dark-text); margin-bottom: 5px;">Immigrant Family-Owned Business</h3>
+                    <p style="color: var(--light-text); font-size: 0.95rem;">Location : Irving, TX.</p>
+                </div>
+                
+                <!-- Current Flyer -->
+                <div style="text-align: center;">
+                    <div style="width: 200px; height: 200px; background: #f8f9fa; border: 3px solid #ffa500; border-radius: 15px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; color: #6c757d; position: relative; overflow: hidden;">
+                        <img src="./public/current_flyer.JPG" alt="Current Flyer" style="width: 90%; height: 90%; object-fit: cover; border-radius: 12px;">
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #ffa500 0%, #ff6b6b 100%);"></div>
+                    </div>
+                    <h3 style="color: var(--dark-text); margin-bottom: 5px;">Current Marketing Efforts</h3>
+                    <p style="color: var(--light-text); font-size: 0.95rem;">Outdated flyers, hoping to increase visibility</p>
+                </div>
+                
+                <!-- The Opportunity -->
+                <div style="text-align: center;">
+                    <div style="width: 200px; height: 200px; background: var(--highlight-bg); border: 3px solid var(--accent-color); border-radius: 15px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                        <div style="text-align: center; color: var(--dark-text);">
+                            <div style="font-size: 2.5rem; margin-bottom: 10px;">🚀</div>
+                            <div style="font-weight: 600; font-size: 1.1rem;">Goal : Increase Customer Flow</div>
+                            <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">Ready to elevate</div>
+                        </div>
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--accent-color) 0%, var(--primary-color) 100%);"></div>
+                    </div>
+                    <h3 style="color: var(--dark-text); margin-bottom: 5px;">Leverage AI</h3>
+                    <p style="color: var(--light-text); font-size: 0.95rem;">But how?</p>
+                </div>
+            </div>
+            
+            <!-- Owner's Perspective -->
+            <div style="background: var(--matcha-light); border: 2px solid var(--primary-color); border-radius: 15px; padding: 25px; margin-top: 30px; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -2px; left: -2px; right: -2px; height: 4px; background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%); border-radius: 15px 15px 0 0;"></div>
+                <div style="text-align: center;">
+                    <h3 style="color: var(--dark-text); margin-bottom: 15px;">Owner's Perspective</h3>
+                    <div style="font-style: italic; font-size: 1.2rem; color: var(--dark-text); margin-bottom: 15px;">
+                        "Business is doing okay, but hoping to use ChatGPT to increase customer flow."
+                    </div>
+                    <p style="color: var(--light-text); margin: 0; font-weight: bold;">
+                        The challenge: All ChatGPT does is give him suggestions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Two Types of Businesses, Same Problem -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>Two Types of Businesses, Same Problem</h2>
+            <p style="text-align: center; color: var(--light-text); margin-bottom: 40px; font-size: 1.1rem;">
+                Both groups struggle with AI, just differently.
+            </p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin: 40px 0; position: relative;">
+                <!-- Vertical Divider -->
+                <div style="position: absolute; left: 50%; top: 15%; bottom: 15%; width: 2px; background: linear-gradient(180deg, transparent 0%, var(--border-color) 20%, var(--border-color) 80%, transparent 100%); transform: translateX(-50%);"></div>
+                
+                <!-- Group 1: The "Know-Hows" -->
+                <div>
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <h3 style="color: var(--primary-color); font-size: 1.5rem; margin-bottom: 8px;">The "Know-Hows"</h3>
+                        <p style="color: var(--light-text); font-size: 1rem;">Aware of AI, but overwhelmed.</p>
+                    </div>
+                    
+                    <!-- Reddit Quote -->
+                    <div style="background: #fff5f5; border: 2px solid #fc8181; border-radius: 12px; padding: 20px; margin-bottom: 25px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -2px; left: -2px; right: -2px; height: 4px; background: linear-gradient(90deg, #fc8181 0%, #ff6b6b 100%); border-radius: 12px 12px 0 0;"></div>
+                        <blockquote style="font-style: italic; margin: 0; color: var(--dark-text); font-size: 1rem; line-height: 1.4;">
+                            "Too many AI options... don't know what will work. Need to pay separately for different tools."
+                        </blockquote>
+                        <a href="https://www.reddit.com/r/AiForSmallBusiness/comments/1jgcmqm/so_many_ai_tools_out_there_how_to_choose/" target="_blank" class="source-link" style="font-size: 0.8rem; margin-top: 8px; display: block;">Reddit Business Owner</a>
+                    </div>
+                    
+                    <!-- Their Problems -->
+                    <div style="background: var(--matcha-light); border: 2px solid var(--primary-color); border-radius: 12px; padding: 20px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -2px; left: -2px; right: -2px; height: 4px; background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%); border-radius: 12px 12px 0 0;"></div>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 1rem; line-height: 1.6;">
+                            <li style="margin-bottom: 8px; color: var(--dark-text);"><b>• Choice paralysis</b></li>
+                            <li style="margin-bottom: 8px; color: var(--dark-text);"><b>• Rising costs</b></li>
+                            <li style="margin-bottom: 0; color: var(--dark-text);"><b>• Trust issues</b></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Group 2: The "Experimenters" -->
+                <div>
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <h3 style="color: #ff6b6b; font-size: 1.5rem; margin-bottom: 8px;">The "Experimenters"</h3>
+                        <p style="color: var(--light-text); font-size: 1rem;">Trying advise from AI tools without expertise.</p>
+                    </div>
+                    
+                    <!-- Real Examples -->
+                    <div style="background: #fff8f0; border: 2px solid #ffa500; border-radius: 12px; padding: 20px; margin-bottom: 25px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -2px; left: -2px; right: -2px; height: 4px; background: linear-gradient(90deg, #ffa500 0%, #ff6b6b 100%); border-radius: 12px 12px 0 0;"></div>
+                        <div style="font-size: 1rem; color: var(--dark-text); margin-bottom: 12px;">
+                            <b>Website crash:</b> 3 days down + $485 repair
+                        </div>
+                        <div style="font-size: 1rem; color: var(--dark-text);">
+                            <b>Marketing fix:</b> 20 hours of rewrites
+                        </div>
+                        <a href="https://www.searchenginejournal.com/relying-too-much-on-ai-is-backfiring-for-businesses/550600/" target="_blank" class="source-link" style="font-size: 0.8rem; margin-top: 10px; display: block;">Search Engine Journal</a>
+                    </div>
+                    
+                    <!-- Their Problems -->
+                    <div style="background: #fff5f5; border: 2px solid #ff6b6b; border-radius: 12px; padding: 20px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -2px; left: -2px; right: -2px; height: 4px; background: linear-gradient(90deg, #ff6b6b 0%, #ffa500 100%); border-radius: 12px 12px 0 0;"></div>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 1rem; line-height: 1.6;">
+                            <li style="margin-bottom: 8px; color: var(--dark-text);"><b>• Expensive cleanup costs</b></li>
+                            <li style="margin-bottom: 8px; color: var(--dark-text);"><b>• Wasted time on fixes</b></li>
+                            <li style="margin-bottom: 0; color: var(--dark-text);"><b>• Damaged brand reputation</b></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Insight -->
+            <div style="background: var(--matcha-light); border: 2px solid var(--primary-color); border-radius: 12px; padding: 25px; text-align: center; margin-top: 30px; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -2px; left: -2px; right: -2px; height: 4px; background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%); border-radius: 12px 12px 0 0;"></div>
+                <p style="font-size: 1.3rem; color: var(--dark-text); font-weight: bold; margin: 0; line-height: 1.4;">
+                    Both need expert guidance to make AI actually work. But who is going to provide that?
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: The Problem: AI Doesn't Know Your Business -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>The Problem: AI Doesn't Know Your Business</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px;">
+                <p style="color: var(--light-text); font-size: 1.1rem;">Most business owners go straight to ChatGPT for help. Here's what happens...</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin: 40px 0; align-items: center;">
+                <!-- Left: The Question -->
+                <div style="text-align: center;">
+                    <div style="background: var(--matcha-light); border: 3px solid var(--primary-color); border-radius: 20px; padding: 30px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -3px; left: -3px; right: -3px; height: 6px; background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%); border-radius: 20px 20px 0 0;"></div>
+                        <div style="font-size: 3rem; margin-bottom: 20px;">💭</div>
+                        <h3 style="color: var(--dark-text); margin-bottom: 15px; font-size: 1.3rem;">Business Owner's Query</h3>
+                        <div style="background: white; padding: 20px; border-radius: 12px; border: 2px solid var(--border-color); font-style: italic; color: var(--dark-text); font-size: 1.1rem;">
+                            "How do I improve my salon's visibility?"
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: ChatGPT Response -->
+                <div>
+                    <div style="background: #f8f9fa; border: 3px solid #6c757d; border-radius: 15px; padding: 25px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -3px; left: -3px; right: -3px; height: 6px; background: linear-gradient(90deg, #6c757d 0%, #495057 100%); border-radius: 15px 15px 0 0;"></div>
+                        <h3 style="color: var(--dark-text); margin-bottom: 15px; font-size: 1.2rem;">ChatGPT's Generic Response:</h3>
+                        <div style="font-family: monospace; font-size: 0.95rem; color: var(--dark-text); line-height: 1.5; background: white; padding: 15px; border-radius: 8px;">
+                            "Local SEO optimization, Google Business Profile, Leverage Social Media, Modern Website .."
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Problem -->
+            <div style="text-align: center; margin: 40px 0;">
+                <div style="font-size: 2rem; margin-bottom: 15px;">😕</div>
+                <h3 style="color: var(--dark-text); margin-bottom: 20px; font-size: 1.4rem;">The Owner's Confusion</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 30px;">
+                    <div style="background: #fff5f5; border: 2px solid #ff6b6b; border-radius: 12px; padding: 20px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -2px; left: -2px; right: -2px; height: 4px; background: linear-gradient(90deg, #ff6b6b 0%, #ffa500 100%); border-radius: 12px 12px 0 0;"></div>
+                        <h4 style="color: var(--dark-text); margin-bottom: 10px;"><b>"What is Local SEO optimization"</b></h4>
+                        <p style="color: var(--light-text); font-size: 0.9rem; margin: 0;">Too technical.</p>
+                    </div>
+                    
+                    <div style="background: #fff5f5; border: 2px solid #ff6b6b; border-radius: 12px; padding: 20px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -2px; left: -2px; right: -2px; height: 4px; background: linear-gradient(90deg, #ff6b6b 0%, #ffa500 100%); border-radius: 12px 12px 0 0;"></div>
+                        <h4 style="color: var(--dark-text); margin-bottom: 10px;"><b>"I need to run my business."</b></h4>
+                        <p style="color: var(--light-text); font-size: 0.9rem; margin: 0;">No time to learn.</p>
+                    </div>
+                    
+                    <div style="background: #fff5f5; border: 2px solid #ff6b6b; border-radius: 12px; padding: 20px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -2px; left: -2px; right: -2px; height: 4px; background: linear-gradient(90deg, #ff6b6b 0%, #ffa500 100%); border-radius: 12px 12px 0 0;"></div>
+                        <h4 style="color: var(--dark-text); margin-bottom: 10px;"><b>"Sounds expensive."</b></h4>
+                        <p style="color: var(--light-text); font-size: 0.9rem; margin: 0;">Where to start?</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Core Issue -->
+            <div style="background: var(--matcha-light); border: 3px solid var(--primary-color); border-radius: 15px; padding: 30px; text-align: center; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -3px; left: -3px; right: -3px; height: 6px; background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%); border-radius: 15px 15px 0 0;"></div>
+                <p style="font-size: 1.4rem; color: var(--dark-text); font-weight: bold; margin: 0; line-height: 1.4;">
+                    Generic AI gives technical answers without understanding your business context.
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Slide 5: What is LocalBizAI? -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>Meet LocalBizAI</h2>
+            <p class="tagline">An intelligent customized AI tool trained specifically for your business need.</p>
+            
+            <div class="ai-system-diagram">
+                <!-- Top Row: Core Inputs -->
+                <div class="top-row-inputs">
+                    <!-- Business DNA -->
+                    <div id="dna-box" class="info-box dna-style">
+                        <div class="emoji">🧬</div>
+                        <h3 class="box-title" style="color: var(--dark-text);">Business DNA</h3>
+                        <p class="box-subtitle" style="color: var(--primary-color);">Internal Intelligence</p>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.95rem; color: var(--light-text); text-align: left; max-width: 200px; margin: 0 auto;">
+                            <li>• Customer patterns</li>
+                            <li>• Revenue cycles</li>
+                            <li>• Operational workflows</li>
+                            <li>• Growth objectives</li>
+                        </ul>
+                    </div>
+                    
+                    <span class="plus-sign">+</span>
+                    
+                    <!-- Local Pulse -->
+                    <div id="pulse-box" class="info-box pulse-style">
+                        <div class="emoji">📍</div>
+                        <h3 class="box-title" style="color: var(--dark-text);">Local Pulse</h3>
+                        <p class="box-subtitle" style="color: var(--accent-color);">Market Intelligence</p>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.95rem; color: var(--light-text); text-align: left; max-width: 200px; margin: 0 auto;">
+                            <li>• Demographics</li>
+                            <li>• Economic indicators</li>
+                            <li>• Seasonal patterns</li>
+                            <li>• Competitor activity</li>
+                        </ul>
+                    </div>
+                    
+                    <span class="plus-sign">+</span>
+                    
+                    <!-- AI Foundation -->
+                    <div id="ai-base-box" class="info-box ai-base-style">
+                        <div class="emoji">🤖</div>
+                        <h3 class="box-title" style="color: var(--dark-text);">AI Foundation</h3>
+                        <p class="box-subtitle" style="color: var(--secondary-color);">Core Intelligence</p>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.95rem; color: var(--light-text); text-align: left; max-width: 200px; margin: 0 auto;">
+                            <li>• Large Language Model</li>
+                            <li>• Pattern recognition</li>
+                            <li>• Decision algorithms</li>
+                            <li>• Machine Learning</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Middle Row: User Input -> AI Partner -> Goals Met -->
+                <div class="middle-row-process">
+                    <div id="sbo-input-callout" class="process-callout input-callout">
+                        <div class="emoji">🗣️</div>
+                        <p class="callout-title" style="font-weight: bold;">Small Business Owner Input</p>
+                        <p class="callout-subtitle">(Business need in plain language)</p>
+                    </div>
+
+                    <div id="ai-partner-box" class="info-box ai-partner-style">
+                        <div class="emoji">🎯</div>
+                        <h3 class="box-title" style="color: var(--dark-text);">Your AI Business Partner</h3>
+                        <p class="box-description">
+                            A custom-trained model that thinks<br>
+                            like you, knows your market,<br>
+                            and optimizes your growth.
+                        </p>
+                    </div>
+
+                    <div id="goals-output-callout" class="process-callout output-callout">
+                        <div class="emoji">✅</div>
+                        <p class="callout-title" style="font-weight: bold;">Achieves Your Business Goals</p>
+                        <p class="callout-subtitle">(Realized benefits, measurable ROI)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SVG for drawing arrows -->
+            <svg class="flow-arrows" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;">
+                <defs>
+                    <marker id="arrowhead-primary" markerWidth="10" markerHeight="7" 
+                            refX="7" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="var(--primary-color)" />
+                    </marker>
+                    <marker id="arrowhead-accent" markerWidth="10" markerHeight="7" 
+                            refX="7" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)" />
+                    </marker>
+                    <marker id="arrowhead-dark-text" markerWidth="10" markerHeight="7" 
+                            refX="7" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="var(--dark-text)" />
+                    </marker>
+                </defs>
+
+                <!-- Arrows from top 3 boxes to a convergence point -->
+                <path id="path-dna" stroke="var(--primary-color)" stroke-width="3" fill="none" marker-end="url(#arrowhead-primary)"/>
+                <path id="path-pulse" stroke="var(--accent-color)" stroke-width="3" fill="none" marker-end="url(#arrowhead-accent)"/>
+                <path id="path-ai-base" stroke="var(--secondary-color)" stroke-width="3" fill="none" marker-end="url(#arrowhead-primary)"/>
+                
+                <!-- Combined arrow to AI Partner Box -->
+                <path id="path-combined-to-partner" stroke="var(--primary-color)" stroke-width="4" fill="none" marker-end="url(#arrowhead-primary)"/>
+
+                <!-- Arrow from SBO Input to AI Partner Box -->
+                <path id="path-sbo-to-partner" stroke="var(--dark-text)" stroke-width="2" fill="none" marker-end="url(#arrowhead-dark-text)"/>
+
+                <!-- Arrow from AI Partner Box to Goals Output -->
+                <path id="path-partner-to-goals" stroke="var(--dark-text)" stroke-width="2" fill="none" marker-end="url(#arrowhead-dark-text)"/>
+            </svg>
+        </div>
+    </div>
+
+
+    <!-- Slide 6: Done-FOR-You, Not Do-It-Yourself -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>Done-FOR-You, Not Do-It-Yourself</h2>
+            <p style="text-align: center; color: var(--light-text); margin-bottom: 50px; font-size: 1.2rem;">
+                Our 4-week implementation process.
+            </p>
+            
+            <!-- Visual Timeline -->
+            <div style="position: relative; margin: 60px 0; padding: 0 40px;">
+                <!-- Main Timeline Line -->
+                <div style="position: absolute; top: 50%; left: 5%; right: 5%; height: 6px; background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%); border-radius: 3px; transform: translateY(-50%);"></div>
+                
+                <!-- Timeline Nodes -->
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); position: relative;">
+                    <!-- Week 1 -->
+                    <div style="text-align: center; position: relative;">
+                        <div style="width: 80px; height: 80px; background: white; border: 6px solid var(--primary-color); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: var(--primary-color); box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; z-index: 2;">1</div>
+                        <h3 style="font-size: 1.3rem; color: var(--dark-text); margin-bottom: 10px;">Analyze</h3>
+                        <p style="font-size: 0.9rem; color: var(--light-text); margin: 0;">Study your business.</p>
+                    </div>
+                    
+                    <!-- Week 2-3 -->
+                    <div style="text-align: center; position: relative;">
+                        <div style="width: 80px; height: 80px; background: white; border: 6px solid var(--accent-color); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: var(--accent-color); box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; z-index: 2;">2</div>
+                        <h3 style="font-size: 1.3rem; color: var(--dark-text); margin-bottom: 10px;">Build</h3>
+                        <p style="font-size: 0.9rem; color: var(--light-text); margin: 0;">Create AI solutions.</p>
+                    </div>
+                    
+                    <!-- Week 4 -->
+                    <div style="text-align: center; position: relative;">
+                        <div style="width: 80px; height: 80px; background: white; border: 6px solid var(--secondary-color); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: var(--secondary-color); box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; z-index: 2;">3</div>
+                        <h3 style="font-size: 1.3rem; color: var(--dark-text); margin-bottom: 10px;">Deploy</h3>
+                        <p style="font-size: 0.9rem; color: var(--light-text); margin: 0;">Install & train.</p>
+                    </div>
+                    
+                    <!-- Ongoing -->
+                    <div style="text-align: center; position: relative;">
+                        <div style="width: 80px; height: 80px; background: white; border: 6px solid #4ecdc4; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800; color: #4ecdc4; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; z-index: 2;">∞</div>
+                        <h3 style="font-size: 1.3rem; color: var(--dark-text); margin-bottom: 10px;">Optimize</h3>
+                        <p style="font-size: 0.9rem; color: var(--light-text); margin: 0;">Monitor & improve.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Key Difference -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin: 60px 0; align-items: center;">
+                <div style="text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 20px; opacity: 0.6;">❌</div>
+                    <h3 style="color: var(--dark-text); font-size: 1.4rem; margin-bottom: 15px;">Traditional Approach</h3>
+                    <p style="color: var(--light-text); font-size: 1rem; margin: 0;">You learn, you build, you fix.</p>
+                </div>
+                
+                <div style="text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">✅</div>
+                    <h3 style="color: var(--dark-text); font-size: 1.4rem; margin-bottom: 15px;">LocalBizAI</h3>
+                    <p style="color: var(--light-text); font-size: 1rem; margin: 0;">We do everything for you.</p>
+                </div>
+            </div>
+            
+            <!-- Bottom Message -->
+            <div style="background: var(--matcha-light); border: 3px solid var(--primary-color); border-radius: 20px; padding: 40px; text-align: center; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -3px; left: -3px; right: -3px; height: 6px; background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%); border-radius: 20px 20px 0 0;"></div>
+                <p style="font-size: 1.6rem; color: var(--dark-text); font-weight: bold; margin: 0; line-height: 1.3;">
+                    You focus on your business.<br>We handle the AI.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Our Strategic Focus -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>Our Strategic Focus</h2>
+            <p style="text-align: center; color: var(--light-text); margin-bottom: 40px; font-size: 1.1rem;">
+                We specialize in three high-impact areas where AI delivers immediate ROI.
+            </p>
+            
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin: 40px 0; position: relative;">
+                <div style="position: absolute; top: -10px; left: 10%; right: 10%; height: 2px; background: linear-gradient(90deg, transparent 0%, var(--primary-color) 50%, transparent 100%);"></div>
+                
+                <div style="background: var(--matcha-light); padding: 25px; border-radius: 15px; border: 1px solid var(--border-color); text-align: center; position: relative; transition: transform 0.3s ease, box-shadow 0.3s ease; overflow: hidden;">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--primary-color); transform: translateX(-100%); transition: transform 0.3s ease;"></div>
+                    <div style="font-size: 2.5rem; margin-bottom: 15px;">👁️</div>
+                    <h3 style="color: var(--dark-text); margin-bottom: 15px; font-size: 1.4rem;">Customer Visibility</h3>
+                    <p style="color: var(--light-text); font-size: 1rem; line-height: 1.5; margin: 0;">Get found online when people search for your services.</p>
+                </div>
+                
+                <div style="background: var(--matcha-light); padding: 25px; border-radius: 15px; border: 1px solid var(--border-color); text-align: center; position: relative; transition: transform 0.3s ease, box-shadow 0.3s ease; overflow: hidden;">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent-color); transform: translateX(-100%); transition: transform 0.3s ease;"></div>
+                    <div style="font-size: 2.5rem; margin-bottom: 15px;">💬</div>
+                    <h3 style="color: var(--dark-text); margin-bottom: 15px; font-size: 1.4rem;">Customer Communication</h3>
+                    <p style="color: var(--light-text); font-size: 1rem; line-height: 1.5; margin: 0;">Never miss an inquiry, booking, or important customer interaction.</p>
+                </div>
+                
+                <div style="background: var(--matcha-light); padding: 25px; border-radius: 15px; border: 1px solid var(--border-color); text-align: center; position: relative; transition: transform 0.3s ease, box-shadow 0.3s ease; overflow: hidden;">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--secondary-color); transform: translateX(-100%); transition: transform 0.3s ease;"></div>
+                    <div style="font-size: 2.5rem; margin-bottom: 15px;">⚡</div>
+                    <h3 style="color: var(--dark-text); margin-bottom: 15px; font-size: 1.4rem;">Operational Efficiency</h3>
+                    <p style="color: var(--light-text); font-size: 1rem; line-height: 1.5; margin: 0;">Automate time-consuming daily tasks that drain your resources.</p>
+                </div>
+            </div>
+            
+            <!-- Why This Focus Works -->
+            <div style="background: var(--highlight-bg); border: 3px solid var(--accent-color); border-radius: 15px; padding: 30px; text-align: center; margin-top: 40px; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -3px; left: -3px; right: -3px; height: 6px; background: linear-gradient(90deg, var(--accent-color) 0%, var(--primary-color) 100%); border-radius: 15px 15px 0 0;"></div>
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: var(--dark-text); margin-bottom: 15px; font-size: 1.5rem;">Why This Approach Works</h3>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; text-align: left;">
+                        <div>
+                            <h4 style="color: var(--primary-color); margin-bottom: 10px; font-size: 1.1rem;"><b>Immediate Impact</b></h4>
+                            <p style="color: var(--light-text); font-size: 0.95rem; margin: 0;">These areas show results within weeks, not months.</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--primary-color); margin-bottom: 10px; font-size: 1.1rem;"><b>Measurable ROI</b></h4>
+                            <p style="color: var(--light-text); font-size: 0.95rem; margin: 0;">Easy to track revenue increases and cost savings.</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="border-top: 2px solid var(--border-color); padding-top: 20px;">
+                    <p style="font-size: 1.3rem; color: var(--dark-text); font-weight: bold; margin: 0; line-height: 1.4;">
+                        By focusing on these three areas, we guarantee results instead of promising everything.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <!-- Slide 8: K Hair Salon: Growth Plan in Action -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>K Hair Salon: From Assessment to Results</h2>
+            <p style="text-align: center; color: var(--light-text); margin-bottom: 40px; font-size: 1.1rem;">
+                How our **personalized analysis** suggested a flyer redesign
+            </p>
+            
+            <!-- Assessment Process -->
+            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: center; margin-bottom: 30px;">
+                
+                <!-- Owner Takes Assessment -->
+                <div style="background: var(--matcha-light); border: 2px solid var(--primary-color); border-radius: 15px; padding: 20px; text-align: center; position: relative; overflow: hidden; height: 160px; display: flex; flex-direction: column; justify-content: center;">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%); border-radius: 15px 15px 0 0;"></div>
+                    <div style="font-size: 2.2rem; margin-bottom: 10px;">📋</div>
+                    <h3 style="color: var(--dark-text); margin-bottom: 8px; font-size: 1.1rem;">Business Challenge</h3>
+                    <p style="color: var(--light-text); font-size: 0.9rem; margin: 0; font-style: italic;">"Need more customers walking through our doors"</p>
+                </div>
+
+                <!-- Arrow -->
+                <div style="text-align: center;">
+                    <div style="font-size: 2.5rem; color: var(--light-text);">→</div>
+                </div>
+                
+                <!-- AI Analysis & Recommendation -->
+                <div style="background: var(--highlight-bg); border: 2px solid var(--accent-color); border-radius: 15px; padding: 20px; text-align: center; position: relative; overflow: hidden; height: 160px; display: flex; flex-direction: column; justify-content: center;">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--accent-color) 0%, var(--primary-color) 100%); border-radius: 15px 15px 0 0;"></div>
+                    <div style="font-size: 2.2rem; margin-bottom: 10px;">🎯</div>
+                    <h3 style="color: var(--dark-text); margin-bottom: 8px; font-size: 1.1rem;">Strategic Discovery</h3>
+                    <p style="color: var(--dark-text); font-size: 0.9rem; margin: 0; font-weight: bold;">
+                        "Hair & Beauty Clients discover services through Instagram & TikTok not through re-designed website"
+                    </p>
+                </div>
+            </div>
+
+            <!-- Actionable Solutions - Flattened -->
+            <div style="background: var(--matcha-light); border: 3px solid var(--primary-color); border-radius: 20px; padding: 20px; margin-bottom: 30px; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%); border-radius: 20px 20px 0 0;"></div>
+                
+                <h3 style="text-align: center; color: var(--dark-text); margin-bottom: 15px; font-size: 1.3rem;">Tailored Implementation Plan</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center;">
+                    <div style="background: white; border-radius: 10px; padding: 15px; border: 2px solid var(--accent-color);">
+                        <p style="margin: 0; font-size: 0.9rem; color: var(--dark-text);"><b>QR-enabled flyers</b> give easy digital access</p>
+                    </div>
+                    <div style="background: white; border-radius: 10px; padding: 15px; border: 2px solid var(--accent-color);">
+                        <p style="margin: 0; font-size: 0.9rem; color: var(--dark-text);"><b>High-traffic locations</b> to target new audience</p>
+                    </div>
+                    <div style="background: white; border-radius: 10px; padding: 15px; border: 2px solid var(--accent-color);">
+                        <p style="margin: 0; font-size: 0.9rem; color: var(--dark-text);"><b>Modern flyers & social media</b> to instantly attract customers' attention</p>
+                    </div>
+                    <div style="background: white; border-radius: 10px; padding: 15px; border: 2px solid var(--accent-color);">
+                        <p style="margin: 0; font-size: 0.9rem; color: var(--dark-text);"><b>Automated social media content</b> to maintain regular engagement</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Large Flyer Display Section -->
+            <div style="background: #f8f9fa; border: 3px solid var(--primary-color); border-radius: 20px; padding: 30px; text-align: center; min-height: 400px; display: flex; flex-direction: column;">
+                <h3 style="color: var(--dark-text); margin-bottom: 10px; font-size: 1.4rem;">Re-Designed Flyers</h3>
+                <p style="color: var(--light-text); font-size: 1rem; margin-bottom: 25px; font-weight: 500;">First step on this AI powered journey</p>
+                
+                <div style="flex-grow: 1; display: flex; justify-content: center; align-items: center; gap: 40px;">
+                    <!-- Image 1 - New Flyer Design -->
+                    <img src="./public/new2.jpg" alt="K Hair Salon Flyer Design 1" style="max-width: 45%; max-height: 350px; height: auto; border-radius: 12px; border: 3px solid var(--primary-color); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);">
+                    
+                    <!-- Image 2 - New Flyer Design -->
+                    <img src="./public/new3.jpg" alt="K Hair Salon Flyer Design 2" style="max-width: 45%; max-height: 350px; height: auto; border-radius: 12px; border: 3px solid var(--primary-color); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);">
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <!-- Slide 9: The Market Reality: AI Creates Winners & Losers -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>The Market Reality: AI Creates Winners & Losers</h2>
+            
+            <!-- Market Reality & Opportunity -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin: 25px 0; align-items: center;">
+                <div style="text-align: center;">
+                    <div style="background: var(--matcha-light); border: 2px solid var(--primary-color); border-radius: 15px; padding: 15px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -2px; left: -2px; right: -2px; height: 4px; background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%); border-radius: 15px 15px 0 0;"></div>
+                        <h4 style="color: var(--primary-color); margin-bottom: 8px; font-size: 1rem;">Total Market</h4>
+                        <div style="font-size: 2.5rem; font-weight: 800; color: var(--dark-text); margin-bottom: 5px;">34.8M</div>
+                        <p style="color: var(--dark-text); margin: 0; font-size: 0.9rem; font-weight: 600;">US Small Businesses</p>
+                    </div>
+                    <a href="https://www.sellerscommerce.com/blog/small-business-statistics/" target="_blank" class="source-link" style="font-size: 0.7rem; margin-top: 5px; display: block;">SBA Office of Advocacy 2025</a>
+                </div>
+                
+                <div style="text-align: center;">
+                    <div style="background: #fff5f5; border: 2px solid #ff6b6b; border-radius: 15px; padding: 15px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -2px; left: -2px; right: -2px; height: 4px; background: linear-gradient(90deg, #ff6b6b 0%, #ffa500 100%); border-radius: 15px 15px 0 0;"></div>
+                        <h4 style="color: #ff6b6b; margin-bottom: 8px; font-size: 1rem;">Opportunity</h4>
+                        <div style="font-size: 2.5rem; font-weight: 800; color: var(--dark-text); margin-bottom: 5px;">15.7M</div>
+                        <p style="color: var(--dark-text); margin: 0; font-size: 0.9rem; font-weight: 600;">NOT Using AI (45%)</p>
+                    </div>
+                    <a href="https://finance.yahoo.com/news/ai-adoption-among-small-businesses-130500714.html" target="_blank" class="source-link" style="font-size: 0.7rem; margin-top: 5px; display: block;">Thryv Survey 2025</a>
+                </div>
+            </div>
+            
+            <!-- Go-to-Market Strategy -->
+            <div style="background: var(--highlight-bg); border: 2px solid var(--accent-color); border-radius: 15px; padding: 15px; margin: 20px 0; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -2px; left: -2px; right: -2px; height: 4px; background: linear-gradient(90deg, var(--accent-color) 0%, var(--primary-color) 100%); border-radius: 15px 15px 0 0;"></div>
+                
+                <h3 style="color: var(--dark-text); margin-bottom: 15px; text-align: center; font-size: 1.2rem;">How We Reach These Businesses</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; text-align: center;">
+                    <div style="background: white; border-radius: 10px; padding: 12px; border: 2px solid var(--primary-color);">
+                        <div style="font-size: 1.8rem; margin-bottom: 5px;">🚶‍♂️</div>
+                        <p style="color: var(--dark-text); font-size: 0.85rem; font-weight: bold; margin: 0;">Door-to-Door Visits</p>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 10px; padding: 12px; border: 2px solid var(--accent-color);">
+                        <div style="font-size: 1.8rem; margin-bottom: 5px;">🤝</div>
+                        <p style="color: var(--dark-text); font-size: 0.85rem; font-weight: bold; margin: 0;">Community Referrals</p>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 10px; padding: 12px; border: 2px solid var(--secondary-color);">
+                        <div style="font-size: 1.8rem; margin-bottom: 5px;">📱</div>
+                        <p style="color: var(--dark-text); font-size: 0.85rem; font-weight: bold; margin: 0;">Social Media Ads</p>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 10px; padding: 12px; border: 2px solid #4ecdc4;">
+                        <div style="font-size: 1.8rem; margin-bottom: 5px;">🔍</div>
+                        <p style="color: var(--dark-text); font-size: 0.85rem; font-weight: bold; margin: 0;">Google Ads</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tiered Pricing Strategy -->
+            <div style="background: var(--matcha-light); border: 2px solid var(--primary-color); border-radius: 15px; padding: 20px; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -2px; left: -2px; right: -2px; height: 4px; background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%); border-radius: 15px 15px 0 0;"></div>
+                
+                <h3 style="color: var(--dark-text); margin-bottom: 15px; text-align: center; font-size: 1.2rem;">Affordable Pricing for Every Business Size</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 15px;">
+                    <!-- Starter Plan -->
+                    <div style="background: white; border-radius: 12px; padding: 18px; border: 2px solid #4ecdc4; text-align: center;">
+                        <h4 style="color: #4ecdc4; margin-bottom: 8px; font-size: 1rem;">STARTER</h4>
+                        <div style="font-size: 2rem; font-weight: 800; color: var(--dark-text); margin-bottom: 8px;">$10</div>
+                        <p style="color: var(--light-text); font-size: 0.75rem; margin-bottom: 12px;">per month</p>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.8rem; color: var(--dark-text); text-align: left;">
+                            <li style="margin-bottom: 4px;">• Custom flyer design</li>
+                            <li style="margin-bottom: 4px;">• Social media content</li>
+                            <li>• Basic branding support</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Growth Plan -->
+                    <div style="background: white; border-radius: 12px; padding: 18px; border: 2px solid var(--primary-color); text-align: center;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 8px; font-size: 1rem;">GROWTH</h4>
+                        <div style="font-size: 2rem; font-weight: 800; color: var(--dark-text); margin-bottom: 8px;">$30</div>
+                        <p style="color: var(--light-text); font-size: 0.75rem; margin-bottom: 12px;">per month</p>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.8rem; color: var(--dark-text); text-align: left;">
+                            <li style="margin-bottom: 4px;">• Local SEO optimization</li>
+                            <li style="margin-bottom: 4px;">• Market data insights</li>
+                            <li>• Ad placement guidance</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Professional Plan -->
+                    <div style="background: white; border-radius: 12px; padding: 18px; border: 2px solid var(--accent-color); text-align: center;">
+                        <h4 style="color: var(--accent-color); margin-bottom: 8px; font-size: 1rem;">PROFESSIONAL</h4>
+                        <div style="font-size: 2rem; font-weight: 800; color: var(--dark-text); margin-bottom: 8px;">$100</div>
+                        <p style="color: var(--light-text); font-size: 0.75rem; margin-bottom: 12px;">per month</p>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.8rem; color: var(--dark-text); text-align: left;">
+                            <li style="margin-bottom: 4px;">• Website design/redesign</li>
+                            <li style="margin-bottom: 4px;">• Competitive analysis</li>
+                            <li>• Real-time suggestions</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Enterprise Plan -->
+                    <div style="background: white; border-radius: 12px; padding: 18px; border: 2px solid var(--secondary-color); text-align: center;">
+                        <h4 style="color: var(--secondary-color); margin-bottom: 8px; font-size: 1rem;">ENTERPRISE</h4>
+                        <div style="font-size: 2rem; font-weight: 800; color: var(--dark-text); margin-bottom: 8px;">$150</div>
+                        <p style="color: var(--light-text); font-size: 0.75rem; margin-bottom: 12px;">per month</p>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.8rem; color: var(--dark-text); text-align: left;">
+                            <li style="margin-bottom: 4px;">• AI chatbot deployment</li>
+                            <li style="margin-bottom: 4px;">• Phone automation</li>
+                            <li>• Booking system setup</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Revenue Projection -->
+                <div style="background: white; border-radius: 12px; padding: 15px; border: 2px solid var(--accent-color);">
+                    <h4 style="color: var(--dark-text); text-align: center; margin-bottom: 10px; font-size: 1rem;">Revenue Target</h4>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center;">
+                        <div>
+                            <p style="color: var(--primary-color); font-weight: bold; margin-bottom: 3px; font-size: 0.85rem;">YEAR 1</p>
+                            <p style="color: var(--dark-text); font-size: 1.1rem; font-weight: bold; margin: 0;">$1.08M ARR</p>
+                            <p style="color: var(--light-text); font-size: 0.75rem; margin: 0;">3,000 customers (avg $30/mo)</p>
+                        </div>
+                        <div>
+                            <p style="color: var(--primary-color); font-weight: bold; margin-bottom: 3px; font-size: 0.85rem;">YEAR 2</p>
+                            <p style="color: var(--dark-text); font-size: 1.1rem; font-weight: bold; margin: 0;">$3M ARR</p>
+                            <p style="color: var(--light-text); font-size: 0.75rem; margin: 0;">5,000 customers (avg $50/mo)</p>
+                        </div>
+                        <div>
+                            <p style="color: var(--primary-color); font-weight: bold; margin-bottom: 3px; font-size: 0.85rem;">YEAR 3</p>
+                            <p style="color: var(--dark-text); font-size: 1.1rem; font-weight: bold; margin: 0;">$12M ARR</p>
+                            <p style="color: var(--light-text); font-size: 0.75rem; margin: 0;">10,000 customers (avg $100/mo)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Slide 10: Partnership Opportunity -->
+    <div class="slide-container">
+        <div class="slide">
+            <h2>Ready to Build Together</h2>
+            <p style="text-align: center; color: var(--light-text); margin-bottom: 60px; font-size: 1.3rem;">
+                AI that caters to the needs of all kinds of business owners.
+            </p>
+            
+            <!-- Founder Profile -->
+            <div style="background: white; border: 3px solid var(--primary-color); border-radius: 20px; padding: 50px; margin: 60px 0; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -3px; left: -3px; right: -3px; height: 6px; background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%); border-radius: 20px 20px 0 0;"></div>
+                
+                <div style="display: grid; grid-template-columns: 200px 1fr; gap: 50px; align-items: center;">
+                    <!-- Photo -->
+                    <div style="text-align: center;">
+                        <img src="public/pp.png" alt="Pratik Dhakal" style="width: 150px; height: 150px; border: 3px solid var(--primary-color); border-radius: 50%; object-fit: cover;" onerror="this.src='public/blog-placeholder-1.jpg'">
+                    </div>
+                    
+                    <!-- Profile Details -->
+                    <div>
+                        <h3 style="color: var(--dark-text); margin-bottom: 25px; font-size: 2rem; font-weight: 800;">Pratik Dhakal, Ph.D</h3>
+                        
+                        <div style="background: var(--matcha-light); border-radius: 12px; padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--primary-color);">
+                            <h4 style="color: var(--primary-color); margin-bottom: 10px; font-size: 1.1rem; font-weight: 600;">🎓 Background & Expertise</h4>
+                            <p style="color: var(--dark-text); margin: 0; font-size: 1rem; line-height: 1.5;">PhD Data Scientist with <b>5+ years of experience</b> in Machine Learning and Computational Research. Specialized in AI/ML applications across oil & gas, chemical and business analytics.</p>
+                        </div>
+                        
+                        <div style="background: white; border-radius: 12px; padding: 20px; border: 2px solid var(--accent-color);">
+                            <h4 style="color: var(--accent-color); margin-bottom: 15px; font-size: 1.1rem; font-weight: 600;">📞 Contact Information</h4>
+                            <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+                                <div>
+                                    <p style="color: var(--dark-text); font-size: 0.9rem; font-weight: 600; margin-bottom: 4px;">Email</p>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="color: var(--primary-color); font-size: 1.1rem;">✉️</span>
+                                        <span style="color: var(--dark-text); font-size: 1rem;">hellolocalbizai@gmail.com</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p style="color: var(--dark-text); font-size: 0.9rem; font-weight: 600; margin-bottom: 4px;">LinkedIn</p>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="color: var(--primary-color); font-size: 1.1rem;">💼</span>
+                                        <a href="https://www.linkedin.com/in/pdhakal94/" target="_blank" style="color: var(--primary-color); text-decoration: none; font-size: 1rem;">linkedin.com/in/pdhakal94</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        let slides = [];
+        let totalSlides = 0;
+
+        function navigateSlide(direction) {
+            if (slides[currentSlide]) {
+                slides[currentSlide].classList.remove('active');
+            }
+
+            currentSlide = currentSlide + direction;
+            
+            if (currentSlide >= totalSlides) {
+                currentSlide = 0;
+            } else if (currentSlide < 0) {
+                currentSlide = totalSlides - 1;
+            }
+            
+            showSlide(currentSlide);
+        }
+
+        function showSlide(index) {
+            slides.forEach((slide) => {
+                slide.style.display = 'none';
+                slide.classList.remove('active');
+            });
+            
+            if (slides[index]) {
+                slides[index].style.display = 'flex';
+                slides[index].classList.add('active');
+            }
+            
+            if (document.getElementById('current-slide')) {
+                document.getElementById('current-slide').textContent = index + 1;
+            }
+
+            // Redraw arrows when slide 5 becomes active
+            if (index === 4) { // Assuming slide 5 is at index 4
+                // Using a small timeout to ensure elements are rendered before calculating positions
+                setTimeout(drawSlide5Arrows, 50); 
+            }
+        }
+
+        function initSlideShow() {
+            slides = document.querySelectorAll('.slide-container');
+            totalSlides = slides.length;
+            
+            if (document.getElementById('total-slides')) {
+                document.getElementById('total-slides').textContent = totalSlides;
+            }
+            
+            showSlide(0);
+        }
+
+        document.addEventListener('DOMContentLoaded', initSlideShow);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                navigateSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                navigateSlide(-1);
+            }
+        });
+
+        function drawSlide5Arrows() {
+            const slide = document.querySelector('.slide-container.active .slide');
+            if (!slide) return;
+
+            const dnaBox = document.getElementById('dna-box');
+            const pulseBox = document.getElementById('pulse-box');
+            const aiBaseBox = document.getElementById('ai-base-box'); // Changed ID from ai-box
+            const aiPartnerBox = document.getElementById('ai-partner-box');
+            const sboInputCallout = document.getElementById('sbo-input-callout'); // New ID from sbo-text
+            const goalsOutputCallout = document.getElementById('goals-output-callout'); // New ID from goals-text
+
+            if (!dnaBox || !pulseBox || !aiBaseBox || !aiPartnerBox || !sboInputCallout || !goalsOutputCallout) return;
+
+            const slideRect = slide.getBoundingClientRect();
+
+            // Helper to get relative coordinates within the slide
+            const getRelativeCenter = (element) => {
+                const rect = element.getBoundingClientRect();
+                return {
+                    x: rect.left + rect.width / 2 - slideRect.left,
+                    y: rect.top + rect.height / 2 - slideRect.top
+                };
+            };
+            const getRelativeBottomCenter = (element) => {
+                const rect = element.getBoundingClientRect();
+                return {
+                    x: rect.left + rect.width / 2 - slideRect.left,
+                    y: rect.bottom - slideRect.top
+                };
+            };
+            const getRelativeTopCenter = (element) => {
+                const rect = element.getBoundingClientRect();
+                return {
+                    x: rect.left + rect.width / 2 - slideRect.left,
+                    y: rect.top - slideRect.top
+                };
+            };
+            const getRelativeLeftCenter = (element) => {
+                const rect = element.getBoundingClientRect();
+                return {
+                    x: rect.left - slideRect.left,
+                    y: rect.top + rect.height / 2 - slideRect.top
+                };
+            };
+            const getRelativeRightCenter = (element) => {
+                const rect = element.getBoundingClientRect();
+                return {
+                    x: rect.right - slideRect.left,
+                    y: rect.top + rect.height / 2 - slideRect.top
+                };
+            };
+
+
+            // Get positions of all relevant elements
+            const dnaPos = getRelativeBottomCenter(dnaBox);
+            const pulsePos = getRelativeBottomCenter(pulseBox);
+            const aiBasePos = getRelativeBottomCenter(aiBaseBox);
+
+            const aiPartnerTopCenter = getRelativeTopCenter(aiPartnerBox);
+            const aiPartnerLeftCenter = getRelativeLeftCenter(aiPartnerBox);
+            const aiPartnerRightCenter = getRelativeRightCenter(aiPartnerBox);
+
+            const sboCalloutRightCenter = getRelativeRightCenter(sboInputCallout);
+            const goalsCalloutLeftCenter = getRelativeLeftCenter(goalsOutputCallout);
+
+
+            // Calculate a common convergence point just above the AI Partner Box
+            const convergenceY = aiPartnerTopCenter.y - 40; // 40px above the AI partner box
+            const convergenceX = aiPartnerTopCenter.x;
+
+            const pathDna = document.getElementById('path-dna');
+            pathDna.setAttribute('d', `M${dnaPos.x},${dnaPos.y} V${convergenceY} H${convergenceX}`);
+
+            const pathPulse = document.getElementById('path-pulse');
+            pathPulse.setAttribute('d', `M${pulsePos.x},${pulsePos.y} V${convergenceY}`);
+            
+            const pathAiBase = document.getElementById('path-ai-base');
+            pathAiBase.setAttribute('d', `M${aiBasePos.x},${aiBasePos.y} V${convergenceY} H${convergenceX}`);
+
+            const pathCombined = document.getElementById('path-combined-to-partner');
+            pathCombined.setAttribute('d', `M${convergenceX},${convergenceY} V${aiPartnerTopCenter.y}`);
+
+
+            // Arrow from "Small Business Owner" input to AI Partner Box
+            const pathSBOtoPartner = document.getElementById('path-sbo-to-partner');
+            pathSBOtoPartner.setAttribute('d', `M${sboCalloutRightCenter.x},${sboCalloutRightCenter.y} L${aiPartnerLeftCenter.x - 5},${aiPartnerLeftCenter.y}`); 
+
+            // Arrow from AI Partner Box to "Meets Goals" output
+            const pathPartnerToGoals = document.getElementById('path-partner-to-goals');
+            pathPartnerToGoals.setAttribute('d', `M${aiPartnerRightCenter.x},${aiPartnerRightCenter.y} L${goalsCalloutLeftCenter.x + 5},${goalsCalloutLeftCenter.y}`);
+        }
+
+        // Add event listener for resize to redraw arrows if necessary
+        window.addEventListener('resize', () => {
+            // Only redraw if on slide 5 (index 4)
+            if (slides[currentSlide] && slides[currentSlide].classList.contains('active') && currentSlide === 4) {
+                drawSlide5Arrows();
+            }
+        });
+
+        // Ensure arrows are drawn on initial load if slide 5 is the first slide, or when navigating to it
+        document.addEventListener('DOMContentLoaded', () => {
+            initSlideShow(); // This already calls showSlide(0)
+            // If slide 5 is the initial slide (currentSlide === 4), draw arrows
+            if (currentSlide === 4) {
+                setTimeout(drawSlide5Arrows, 50); // Small delay to ensure rendering
+            }
+        });
+    </script>
+</body>
+</html>

@@ -7,17 +7,11 @@ import { Label } from '@/components/ui/Label';
 
 interface AssessmentData {
   businessType: string;
-  country: string;
-  state: string;
-  city: string;
-  zipCode: string;
-  teamSize: string;
-  currentAiUsage: string;
-  biggestFrustration: string;
-  aiProblems: string;
-  overwhelmLevel: string;
-  behindConcern: string;
-  appealingOption: string;
+  location: string;
+  marketingChallenges: string[];
+  customerDiscovery: string;
+  techComfort: string;
+  businessGoals: string[];
 }
 
 export default function AssessmentPage() {
@@ -29,29 +23,20 @@ export default function AssessmentPage() {
 
   const [formData, setFormData] = useState<AssessmentData>({
     businessType: '',
-    country: '',
-    state: '',
-    city: '',
-    zipCode: '',
-    teamSize: '',
-    currentAiUsage: '',
-    biggestFrustration: '',
-    aiProblems: '',
-    overwhelmLevel: '',
-    behindConcern: '',
-    appealingOption: ''
+    location: '',
+    marketingChallenges: [],
+    customerDiscovery: '',
+    techComfort: '',
+    businessGoals: []
   });
 
   const businessTypes = [
+    'Hair/Beauty Salon',
     'Restaurant/Food Service',
-    'Retail/Online Store',
-    'Professional Services',
-    'Healthcare/Medical',
-    'Real Estate',
-    'Construction/Home Services',
-    'Beauty/Personal Care',
-    'Fitness/Wellness',
-    'Consulting/Freelance',
+    'Retail Store',
+    'Professional Services (law, accounting, etc.)',
+    'Home Services (plumbing, cleaning, etc.)',
+    'Healthcare/Wellness',
     'Other'
   ];
 
@@ -62,43 +47,172 @@ export default function AssessmentPage() {
     }));
   };
 
+  const handleMultipleChoice = (field: 'marketingChallenges' | 'businessGoals', value: string) => {
+    setFormData(prev => {
+      const currentValues = prev[field];
+      const isSelected = currentValues.includes(value);
+      
+      return {
+        ...prev,
+        [field]: isSelected 
+          ? currentValues.filter(item => item !== value)
+          : [...currentValues, value]
+      };
+    });
+  };
+
   const buildGeminiPrompt = (data: AssessmentData): string => {
-    const location = [data.city, data.state, data.country].filter(Boolean).join(', ');
-    
-    return `You are an AI business consultant. Create a simple, practical 4-step plan based on this business assessment.
+    return `You are LocalBizAI - an intelligent AI tool trained specifically for ${data.businessType} businesses.
 
-BUSINESS: ${data.businessType} in ${location}
-TEAM SIZE: ${data.teamSize}
-AI EXPERIENCE: ${data.currentAiUsage}
-MAIN FRUSTRATION: ${data.biggestFrustration}
-PROBLEMS EXPERIENCED: ${data.aiProblems}
-FEELING ABOUT AI OPTIONS: ${data.overwhelmLevel}
-COMPETITION CONCERN: ${data.behindConcern}
-PREFERRED SOLUTION: ${data.appealingOption}
+**LOCALBIZAI COMPANY OVERVIEW:**
+LocalBizAI translates AI capabilities into business solutions you can actually use. We solve the problem where business owners get generic AI advice that doesn't understand their business context.
 
-Create a response with these 4 sections:
+**THE CORE PROBLEM WE SOLVE:**
+Two types of businesses struggle with AI:
+1. "Know-Hows" - Aware of AI but overwhelmed by choices, costs, complexity
+2. "Experimenters" - Trying AI tools without expertise, leading to expensive failures
+
+Generic AI tools like ChatGPT provide technical answers without understanding business context, leaving owners confused.
+
+**LOCALBIZAI METHODOLOGY:**
+We create "Your AI Business Partner" by combining three intelligence sources:
+
+🧬 **Business DNA**: Customer patterns, revenue cycles, operational workflows, growth objectives
+📍 **Local Pulse**: Demographics, economic indicators, seasonal patterns, competitor activity  
+🤖 **AI Foundation**: Large Language Model, pattern recognition, decision algorithms, machine learning
+
+= **Your AI Business Partner**: A custom-trained model that thinks like you, knows your market, and optimizes your growth.
+
+**OUR STRATEGIC FOCUS AREAS:**
+1. **Customer Visibility**: Getting found online when people search for services
+2. **Customer Communication**: Never missing inquiries, bookings, or interactions  
+3. **Operational Efficiency**: Automating time-consuming daily tasks
+
+**PROVEN SOLUTIONS WE OFFER:**
+- QR-enabled flyers for easy digital access
+- Local SEO optimization and Google Business Profile
+- Social media automation and content creation
+- AI chatbot for 24/7 customer service
+- Automated booking and scheduling systems
+- Inquiry management and response automation
+- Workflow automation and scheduling optimization
+- Analytics dashboards and performance monitoring
+
+**DONE-FOR-YOU 4-WEEK PROCESS:**
+- **Week 1 - Analyze**: Study your business patterns and local market
+- **Week 2-3 - Build**: Create custom AI solutions for your challenges
+- **Week 4 - Deploy**: Install systems and train your team
+- **Ongoing - Optimize**: Monitor performance and improve results
+
+**CASE STUDY EXAMPLE - K Hair Salon (Irving, TX):**
+Challenge: Owner wanted to use AI to increase customer flow but only got generic ChatGPT suggestions
+LocalBizAI Solution: Created QR-enabled flyers, redesigned marketing materials, targeted high-traffic locations
+Approach: Combined Business DNA (hair/beauty discovery patterns) + Local Pulse (Irving demographics) + AI Foundation
+
+**BUSINESS ASSESSMENT:**
+Type: ${data.businessType} in ${data.location}
+Challenges: ${data.marketingChallenges.join(', ')}
+Customer Discovery: ${data.customerDiscovery}
+Tech Comfort: ${data.techComfort}
+Goals: ${data.businessGoals.join(', ')}
+
+**RESPONSE FORMAT AND STYLE:**
+
+Use the EXACT tone and language from the slide deck. Here's how to format each section:
 
 ## STEP 1: What We Found About Your Business
-Write 2-3 sentences about their specific situation. Be conversational and understanding.
+Use slide deck analysis style - direct and business-focused:
+• Business DNA Analysis: [Current customer patterns and revenue reality]
+• Local Market Reality: [Competition level and market opportunity]
+
+**EXAMPLE FOR HAIR SALON:**
+• Business DNA Analysis: Word-of-mouth referrals limit growth potential
+• Local Market Reality: Irving market underserved for modern salon experience
 
 ## STEP 2: Your Personalized AI Plan
-List 3 specific things they should focus on. Keep each item to 1-2 sentences. No technical jargon.
+Use slide deck solution style - specific outcomes, not features:
+
+• Customer Visibility: [Action + specific result]
+• Customer Communication: [Action + specific result]  
+• Operational Efficiency: [Action + specific result]
+
+**EXAMPLE FOR HAIR SALON:**
+• Customer Visibility: QR-enabled flyers instantly connect customers to booking
+• Customer Communication: 24/7 AI booking prevents missed appointment opportunities
+• Operational Efficiency: Automated scheduling saves 10+ hours weekly admin
 
 ## STEP 3: How We'll Guide You
-Explain in simple terms how implementation would work. 2-3 sentences maximum.
+Use slide deck 4-week format - what WE do for THEM:
 
-## STEP 4: What You Can Expect
-Describe realistic outcomes in 30, 60, and 90 days. Keep it practical, not dramatic.
+• Week 1 - Analyze: [Study your specific business patterns]
+• Week 2-3 - Build: [Create your custom solutions]  
+• Week 4 - Deploy: [Install and train systems]
+• Ongoing - Optimize: [Monitor and improve performance]
 
-Keep the entire response under 400 words. Use simple language like you're talking to a friend. Focus on their specific frustrations and concerns. Be encouraging but realistic.`;
+**EXAMPLE FOR HAIR SALON:**
+• Week 1 - Analyze: Study Irving salon customer behaviors
+• Week 2-3 - Build: Create QR flyers and booking system
+• Week 4 - Deploy: Install systems and train staff
+• Ongoing - Optimize: Track bookings and optimize placement
+
+**CRITICAL FORMATTING REQUIREMENTS:**
+
+**ANSWER STYLE:**
+- Each bullet point = 1-2 sentences MAXIMUM
+- No dramatic language or unrealistic promises
+- Factual, straightforward, professional tone
+- Numbers must be realistic and achievable
+- No marketing fluff or exaggerated claims
+
+**VISUAL FORMATTING:**
+- Use bullet points (•) for clean visual appeal
+- Keep lines short for mobile readability
+- Bold key terms for emphasis
+- Use consistent structure across all sections
+- Clean spacing between sections
+
+**CONTENT RESTRICTIONS:**
+- No promises over 50% improvement unless realistic
+- Use conservative estimates (10-40% range)
+- Focus on process benefits, not dramatic outcomes
+- Keep technical terms to minimum
+- Make claims that are achievable for their business type
+
+**TONE GUIDELINES:**
+- Professional but approachable
+- Confident without being boastful
+- Solution-focused, not sales-heavy
+- Honest about what LocalBizAI actually delivers
+- "We do X for you" Done-FOR-You approach
+- Reference their specific business type and location
+- Total response under 120 words for mobile viewing
+
+**VISUAL EXAMPLE OF CLEAN FORMATTING:**
+• Business DNA Analysis: Word-of-mouth referrals limit growth potential
+• Local Market Reality: Irving market has room for modern salon experience
+
+• Customer Visibility: QR-enabled flyers connect customers to instant booking
+• Customer Communication: 24/7 AI booking prevents missed opportunities  
+• Operational Efficiency: Automated scheduling saves 8-12 hours weekly
+
+• Week 1 - Analyze: Study Irving salon customer behaviors
+• Week 2-3 - Build: Create QR flyers and booking system
+• Week 4 - Deploy: Install systems and train staff
+• Ongoing - Optimize: Track bookings and optimize placement
+
+**CRITICAL REQUIREMENTS:**
+- Use bullet points (•) for ALL content - NO bold formatting like **text**
+- Write "Customer Visibility:" not "**Customer Visibility:**"
+- Write "Week 1 - Analyze:" not "**Week 1 - Analyze:**" 
+- Only provide 3 steps total (remove Step 4 completely)
+- This is an assessment, not a complete implementation plan`;
   };
 
   const parseGeminiResponse = (response: string) => {
     const sections = {
       step1: '',
       step2: [] as string[],
-      step3: '',
-      step4: { thirtyDays: '', sixtyDays: '', ninetyDays: '' }
+      step3: ''
     };
 
     const lines = response.split('\n');
@@ -115,14 +229,11 @@ Keep the entire response under 400 words. Use simple language like you're talkin
       } else if (line.includes('STEP 3:')) {
         currentSection = 'step3';
         continue;
-      } else if (line.includes('STEP 4:')) {
-        currentSection = 'step4';
-        continue;
       }
 
       if (line.trim() && !line.startsWith('#')) {
         if (currentSection === 'step1') {
-          sections.step1 += line.trim() + ' ';
+          sections.step1 += line.trim() + '\n';
         } else if (currentSection === 'step2') {
           if (line.trim().startsWith('•') || line.trim().startsWith('-')) {
             step2Items.push(line.trim().replace(/^[•-]\s*/, ''));
@@ -130,15 +241,7 @@ Keep the entire response under 400 words. Use simple language like you're talkin
             step2Items.push(line.trim());
           }
         } else if (currentSection === 'step3') {
-          sections.step3 += line.trim() + ' ';
-        } else if (currentSection === 'step4') {
-          if (line.includes('30 days:') || line.includes('30-day')) {
-            sections.step4.thirtyDays = line.replace(/.*30\s*days?:?\s*/i, '').trim();
-          } else if (line.includes('60 days:') || line.includes('60-day')) {
-            sections.step4.sixtyDays = line.replace(/.*60\s*days?:?\s*/i, '').trim();
-          } else if (line.includes('90 days:') || line.includes('90-day')) {
-            sections.step4.ninetyDays = line.replace(/.*90\s*days?:?\s*/i, '').trim();
-          }
+          sections.step3 += line.trim() + '\n';
         }
       }
     }
@@ -193,15 +296,8 @@ Keep the entire response under 400 words. Use simple language like you're talkin
   };
 
   const isStepComplete = () => {
-    switch (currentStep) {
-      case 1:
-        return formData.businessType && formData.country && formData.teamSize;
-      case 2:
-        return formData.currentAiUsage && formData.biggestFrustration && formData.aiProblems && 
-               formData.overwhelmLevel && formData.behindConcern && formData.appealingOption;
-      default:
-        return false;
-    }
+    return formData.businessType && formData.location && formData.marketingChallenges.length > 0 && 
+           formData.customerDiscovery && formData.techComfort && formData.businessGoals.length > 0;
   };
 
   if (currentStep === 3 && parsedResult) {
@@ -229,9 +325,9 @@ Keep the entire response under 400 words. Use simple language like you're talkin
               <div className="flex-1">
                 <h3 className="text-xl font-bold mb-2">YOUR SITUATION</h3>
                 <p className="text-green-50 text-base font-medium leading-relaxed">
-                  Based on your answers, you're a <span className="font-bold">{formData.businessType.toLowerCase()}</span> feeling{' '}
-                  <span className="font-bold">{formData.overwhelmLevel.toLowerCase()}</span> about AI tools, with{' '}
-                  <span className="font-bold">{formData.currentAiUsage.toLowerCase()}</span> experience.
+                  Based on your answers, you're a <span className="font-bold">{formData.businessType.toLowerCase()}</span> in{' '}
+                  <span className="font-bold">{formData.location}</span> with{' '}
+                  <span className="font-bold">{formData.marketingChallenges.length} key challenge{formData.marketingChallenges.length !== 1 ? 's' : ''}</span> to address.
                 </p>
               </div>
             </div>
@@ -252,162 +348,77 @@ Keep the entire response under 400 words. Use simple language like you're talkin
             </div>
           </div>
 
-          {/* Visual Timeline */}
+          {/* Clean Assessment Results */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
             <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-8 py-6">
               <h2 className="text-2xl font-bold text-white text-center">
-                YOUR AI TRANSFORMATION JOURNEY
+                YOUR AI TRANSFORMATION PLAN
               </h2>
             </div>
 
-            <div className="p-8">
-              {/* Step 1 */}
-              <div className="relative">
-                <div className="flex items-start space-x-6 pb-8">
-                  <div className="flex-shrink-0">
-                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center border-4 border-green-500">
-                      <span className="text-2xl">📋</span>
-                    </div>
+            <div className="p-8 space-y-8">
+              {/* Step 1 - Clean Analysis */}
+              <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                    <span className="text-xl text-white">📋</span>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="bg-green-50 rounded-xl p-6 border-l-4 border-green-500">
-                      <h3 className="text-xl font-bold text-green-800 mb-3">
-                        STEP 1: ANALYSIS <span className="text-base font-medium text-green-600">(Day 1)</span>
-                      </h3>
-                      <h4 className="font-bold text-gray-900 mb-2">What We Found About Your Business</h4>
-                      <p className="text-gray-700 text-base font-medium leading-relaxed">
-                        {parsedResult.step1}
-                      </p>
-                    </div>
-                  </div>
+                  <h3 className="text-xl font-bold text-green-800">
+                    STEP 1: What We Found About Your Business
+                  </h3>
                 </div>
-                
-                {/* Arrow */}
-                <div className="flex justify-center mb-8">
-                  <div className="w-8 h-8 text-green-500">
-                    <svg className="w-full h-full" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a.75.75 0 01-.75-.75V4.66L7.3 6.76a.75.75 0 11-1.1-1.02l3.25-3.5a.75.75 0 011.1 0l3.25 3.5a.75.75 0 01-1.1 1.02L10.75 4.66v12.59A.75.75 0 0110 18z" />
-                    </svg>
-                  </div>
-                </div>
-
-                {/* Step 2 */}
-                <div className="flex items-start space-x-6 pb-8">
-                  <div className="flex-shrink-0">
-                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center border-4 border-blue-500">
-                      <span className="text-2xl">🎯</span>
+                <div className="ml-13 space-y-2">
+                  {parsedResult.step1.split('\n').filter((line: string) => line.trim()).map((line: string, index: number) => (
+                    <div key={index} className="flex items-start space-x-3">
+                      <span className="text-green-600 mt-1">•</span>
+                      <p className="text-gray-700 text-base leading-relaxed">{line.replace(/^[•\-\*]\s*/, '')}</p>
                     </div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="bg-blue-50 rounded-xl p-6 border-l-4 border-blue-500">
-                      <h3 className="text-xl font-bold text-blue-800 mb-3">
-                        STEP 2: YOUR PLAN <span className="text-base font-medium text-blue-600">(Days 1-30)</span>
-                      </h3>
-                      <h4 className="font-bold text-gray-900 mb-3">Your Personalized AI Plan</h4>
-                      <div className="space-y-3">
-                        {parsedResult.step2.map((item: string, index: number) => (
-                          <div key={index} className="flex items-start space-x-3">
-                            <div className="flex-shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center mt-0.5">
-                              <span className="text-white text-sm font-bold">✓</span>
-                            </div>
-                            <p className="text-gray-700 text-base font-medium">{item}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Arrow */}
-                <div className="flex justify-center mb-8">
-                  <div className="w-8 h-8 text-green-500">
-                    <svg className="w-full h-full" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a.75.75 0 01-.75-.75V4.66L7.3 6.76a.75.75 0 11-1.1-1.02l3.25-3.5a.75.75 0 011.1 0l3.25 3.5a.75.75 0 01-1.1 1.02L10.75 4.66v12.59A.75.75 0 0110 18z" />
-                    </svg>
-                  </div>
-                </div>
-
-                {/* Step 3 */}
-                <div className="flex items-start space-x-6 pb-8">
-                  <div className="flex-shrink-0">
-                    <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center border-4 border-purple-500">
-                      <span className="text-2xl">🚀</span>
-                    </div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="bg-purple-50 rounded-xl p-6 border-l-4 border-purple-500">
-                      <h3 className="text-xl font-bold text-purple-800 mb-3">
-                        STEP 3: GUIDED SETUP <span className="text-base font-medium text-purple-600">(Days 31-60)</span>
-                      </h3>
-                      <h4 className="font-bold text-gray-900 mb-2">How We'll Guide You</h4>
-                      <p className="text-gray-700 text-base font-medium leading-relaxed">
-                        {parsedResult.step3}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Arrow */}
-                <div className="flex justify-center mb-8">
-                  <div className="w-8 h-8 text-green-500">
-                    <svg className="w-full h-full" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a.75.75 0 01-.75-.75V4.66L7.3 6.76a.75.75 0 11-1.1-1.02l3.25-3.5a.75.75 0 011.1 0l3.25 3.5a.75.75 0 01-1.1 1.02L10.75 4.66v12.59A.75.75 0 0110 18z" />
-                    </svg>
-                  </div>
-                </div>
-
-                {/* Step 4 */}
-                <div className="flex items-start space-x-6">
-                  <div className="flex-shrink-0">
-                    <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center border-4 border-emerald-500">
-                      <span className="text-2xl">📈</span>
-                    </div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="bg-emerald-50 rounded-xl p-6 border-l-4 border-emerald-500">
-                      <h3 className="text-xl font-bold text-emerald-800 mb-3">
-                        STEP 4: RESULTS <span className="text-base font-medium text-emerald-600">(Days 61-90)</span>
-                      </h3>
-                      <h4 className="font-bold text-gray-900 mb-3">What You Can Expect</h4>
-                      <div className="space-y-4">
-                        {parsedResult.step4.thirtyDays && (
-                          <div className="flex items-start space-x-3">
-                            <div className="flex-shrink-0 w-8 h-8 bg-emerald-200 rounded-full flex items-center justify-center">
-                              <span className="text-emerald-700 text-sm font-bold">30</span>
-                            </div>
-                            <div>
-                              <p className="text-sm font-bold text-emerald-800">30 days:</p>
-                              <p className="text-gray-700 text-base font-medium">{parsedResult.step4.thirtyDays}</p>
-                            </div>
-                          </div>
-                        )}
-                        {parsedResult.step4.sixtyDays && (
-                          <div className="flex items-start space-x-3">
-                            <div className="flex-shrink-0 w-8 h-8 bg-emerald-300 rounded-full flex items-center justify-center">
-                              <span className="text-emerald-800 text-sm font-bold">60</span>
-                            </div>
-                            <div>
-                              <p className="text-sm font-bold text-emerald-800">60 days:</p>
-                              <p className="text-gray-700 text-base font-medium">{parsedResult.step4.sixtyDays}</p>
-                            </div>
-                          </div>
-                        )}
-                        {parsedResult.step4.ninetyDays && (
-                          <div className="flex items-start space-x-3">
-                            <div className="flex-shrink-0 w-8 h-8 bg-emerald-400 rounded-full flex items-center justify-center">
-                              <span className="text-emerald-900 text-sm font-bold">90</span>
-                            </div>
-                            <div>
-                              <p className="text-sm font-bold text-emerald-800">90 days:</p>
-                              <p className="text-gray-700 text-base font-medium">{parsedResult.step4.ninetyDays}</p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
+
+              {/* Step 2 - AI Plan */}
+              <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                    <span className="text-xl text-white">🎯</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-blue-800">
+                    STEP 2: Your Personalized AI Plan
+                  </h3>
+                </div>
+                <div className="ml-13 space-y-3">
+                  {parsedResult.step2.map((item: string, index: number) => (
+                    <div key={index} className="flex items-start space-x-3">
+                      <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
+                        <span className="text-white text-xs font-bold">✓</span>
+                      </div>
+                      <p className="text-gray-700 text-base leading-relaxed">{item}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Step 3 - Implementation */}
+              <div className="bg-purple-50 rounded-xl p-6 border border-purple-200">
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+                    <span className="text-xl text-white">🚀</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-purple-800">
+                    STEP 3: How We'll Guide You
+                  </h3>
+                </div>
+                <div className="ml-13 space-y-2">
+                  {parsedResult.step3.split('\n').filter((line: string) => line.trim()).map((line: string, index: number) => (
+                    <div key={index} className="flex items-start space-x-3">
+                      <span className="text-purple-600 mt-1">•</span>
+                      <p className="text-gray-700 text-base leading-relaxed">{line.replace(/^[•\-\*]\s*/, '')}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -415,16 +426,16 @@ Keep the entire response under 400 words. Use simple language like you're talkin
           <div className="mt-12 text-center">
             <div className="bg-white rounded-2xl border-2 border-green-200 p-8 shadow-lg">
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                Interested in learning more?
+                Ready to Get Started?
               </h3>
               <p className="text-gray-600 text-base font-medium mb-6 max-w-2xl mx-auto">
-                Ready to transform your business with a personalized AI implementation plan?
+                Let's discuss how we can help your business grow with AI solutions.
               </p>
               <div className="space-y-4">
                 <Button 
                   className="bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold px-8 py-3 text-lg"
                 >
-                  Get Started Today
+                  Get in Touch
                 </Button>
                 <div>
                   <Button 
@@ -434,17 +445,11 @@ Keep the entire response under 400 words. Use simple language like you're talkin
                       setParsedResult(null);
                       setFormData({
                         businessType: '',
-                        country: '',
-                        state: '',
-                        city: '',
-                        zipCode: '',
-                        teamSize: '',
-                        currentAiUsage: '',
-                        biggestFrustration: '',
-                        aiProblems: '',
-                        overwhelmLevel: '',
-                        behindConcern: '',
-                        appealingOption: ''
+                        location: '',
+                        marketingChallenges: [],
+                        customerDiscovery: '',
+                        techComfort: '',
+                        businessGoals: []
                       });
                     }}
                     variant="outline"
@@ -478,282 +483,167 @@ Keep the entire response under 400 words. Use simple language like you're talkin
         {/* Progress Indicator */}
         <div className="mb-8">
           <div className="flex justify-between text-sm text-gray-600 font-medium mb-2">
-            <span>Step {currentStep} of 2</span>
-            <span>{Math.round((currentStep / 2) * 100)}% Complete</span>
+            <span>Quick Assessment</span>
+            <span>5 Questions</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-3">
             <div 
               className="bg-gradient-to-r from-green-600 to-emerald-600 h-3 rounded-full transition-all duration-300"
-              style={{ width: `${(currentStep / 2) * 100}%` }}
+              style={{ width: `${isStepComplete() ? 100 : 20}%` }}
             ></div>
           </div>
         </div>
 
         {/* Form Container */}
         <div className="bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-200/50 shadow-lg p-8">
-          {/* Step 1: Business Context */}
-          {currentStep === 1 && (
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">Quick Business Assessment</h2>
+          <div className="space-y-8">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-8">Business Context</h2>
-              <div className="space-y-6">
-                <div>
-                  <Label htmlFor="businessType" className="text-base font-bold text-gray-800">
-                    1. What type of business do you run? *
-                  </Label>
-                  <select
-                    id="businessType"
-                    value={formData.businessType}
-                    onChange={(e) => handleInputChange('businessType', e.target.value)}
-                    className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-base font-medium"
-                    required
-                  >
-                    <option value="">Select your business type</option>
-                    {businessTypes.map(type => (
-                      <option key={type} value={type}>{type}</option>
-                    ))}
-                  </select>
-                </div>
+              <Label htmlFor="businessType" className="text-base font-bold text-gray-800">
+                1. What best describes your business? *
+              </Label>
+              <select
+                id="businessType"
+                value={formData.businessType}
+                onChange={(e) => handleInputChange('businessType', e.target.value)}
+                className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-base font-medium"
+                required
+              >
+                <option value="">Select your business type</option>
+                {businessTypes.map(type => (
+                  <option key={type} value={type}>{type}</option>
+                ))}
+              </select>
+            </div>
 
-                <div>
-                  <Label className="text-base font-bold text-gray-800 mb-3 block">
-                    2. Where are you located?
-                  </Label>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="country" className="text-sm font-medium text-gray-600">Country *</Label>
-                      <Input
-                        id="country"
-                        value={formData.country}
-                        onChange={(e) => handleInputChange('country', e.target.value)}
-                        placeholder="United States"
-                        className="mt-1 text-base font-medium"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="state" className="text-sm font-medium text-gray-600">State/Province</Label>
-                      <Input
-                        id="state"
-                        value={formData.state}
-                        onChange={(e) => handleInputChange('state', e.target.value)}
-                        placeholder="California"
-                        className="mt-1 text-base font-medium"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="city" className="text-sm font-medium text-gray-600">City</Label>
-                      <Input
-                        id="city"
-                        value={formData.city}
-                        onChange={(e) => handleInputChange('city', e.target.value)}
-                        placeholder="San Francisco"
-                        className="mt-1 text-base font-medium"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="zipCode" className="text-sm font-medium text-gray-600">Zip Code</Label>
-                      <Input
-                        id="zipCode"
-                        value={formData.zipCode}
-                        onChange={(e) => handleInputChange('zipCode', e.target.value)}
-                        placeholder="94102"
-                        className="mt-1 text-base font-medium"
-                      />
-                    </div>
-                  </div>
-                </div>
+            <div>
+              <Label htmlFor="location" className="text-base font-bold text-gray-800">
+                2. Where is your business located? *
+              </Label>
+              <Input
+                id="location"
+                value={formData.location}
+                onChange={(e) => handleInputChange('location', e.target.value)}
+                placeholder="e.g., Irving, TX or San Francisco, CA"
+                className="mt-2 text-base font-medium"
+                required
+              />
+            </div>
 
-                <div>
-                  <Label className="text-base font-bold text-gray-800 mb-3 block">
-                    3. How many people work in your business? *
-                  </Label>
-                  <div className="space-y-3">
-                    {['Just me', '2-5 people', '6-20 people', '20+ people'].map(size => (
-                      <label key={size} className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-green-50 cursor-pointer transition-colors">
-                        <input
-                          type="radio"
-                          name="teamSize"
-                          value={size}
-                          checked={formData.teamSize === size}
-                          onChange={(e) => handleInputChange('teamSize', e.target.value)}
-                          className="mr-3 w-4 h-4 text-green-600"
-                        />
-                        <span className="text-base font-medium text-gray-800">{size}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
+            <div>
+              <Label className="text-base font-bold text-gray-800 mb-3 block">
+                3. What marketing challenges are you facing? (Select all that apply) *
+              </Label>
+              <p className="text-sm text-gray-600 mb-4">Choose multiple options that describe your current situation</p>
+              <div className="space-y-3">
+                {[
+                  'Not enough customers know about my business',
+                  'Customers can\'t easily book appointments/services',
+                  'Too much time spent on repetitive customer questions',
+                  'Hard to compete with larger businesses online',
+                  'Don\'t know which marketing actually works'
+                ].map(challenge => (
+                  <label key={challenge} className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors ${
+                    formData.marketingChallenges.includes(challenge) 
+                      ? 'border-green-500 bg-green-50' 
+                      : 'border-gray-200 hover:bg-green-50'
+                  }`}>
+                    <input
+                      type="checkbox"
+                      value={challenge}
+                      checked={formData.marketingChallenges.includes(challenge)}
+                      onChange={() => handleMultipleChoice('marketingChallenges', challenge)}
+                      className="mr-3 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
+                    />
+                    <span className="text-base font-medium text-gray-800">{challenge}</span>
+                  </label>
+                ))}
               </div>
             </div>
-          )}
 
-          {/* Step 2: AI Reality Check */}
-          {currentStep === 2 && (
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-8">AI Reality Check</h2>
-              <div className="space-y-8">
-                <div>
-                  <Label className="text-base font-bold text-gray-800 mb-3 block">
-                    4. Are you currently using any AI tools? *
-                  </Label>
-                  <div className="space-y-3">
-                    {[
-                      'No, haven\'t tried any',
-                      'Yes, 1-2 tools',
-                      'Yes, 3-5 tools',
-                      'Yes, more than 5 tools'
-                    ].map(usage => (
-                      <label key={usage} className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-green-50 cursor-pointer transition-colors">
-                        <input
-                          type="radio"
-                          name="currentAiUsage"
-                          value={usage}
-                          checked={formData.currentAiUsage === usage}
-                          onChange={(e) => handleInputChange('currentAiUsage', e.target.value)}
-                          className="mr-3 w-4 h-4 text-green-600"
-                        />
-                        <span className="text-base font-medium text-gray-800">{usage}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <Label className="text-base font-bold text-gray-800 mb-3 block">
-                    5. If you use AI tools, what's your biggest frustration? *
-                  </Label>
-                  <div className="space-y-3">
-                    {[
-                      'They don\'t understand my business',
-                      'Too many different tools to manage',
-                      'Results are generic and unhelpful',
-                      'Don\'t know which tools actually work',
-                      'Hard to set up and use',
-                      'Not applicable - don\'t use AI yet'
-                    ].map(frustration => (
-                      <label key={frustration} className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-green-50 cursor-pointer transition-colors">
-                        <input
-                          type="radio"
-                          name="biggestFrustration"
-                          value={frustration}
-                          checked={formData.biggestFrustration === frustration}
-                          onChange={(e) => handleInputChange('biggestFrustration', e.target.value)}
-                          className="mr-3 w-4 h-4 text-green-600"
-                        />
-                        <span className="text-base font-medium text-gray-800">{frustration}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <Label className="text-base font-bold text-gray-800 mb-3 block">
-                    6. Have AI tools ever created problems for you? *
-                  </Label>
-                  <div className="space-y-3">
-                    {[
-                      'Yes, caused errors or mistakes',
-                      'Yes, wasted time with poor results',
-                      'Yes, confused customers/clients',
-                      'No major problems',
-                      'Haven\'t used AI tools enough to know'
-                    ].map(problem => (
-                      <label key={problem} className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-green-50 cursor-pointer transition-colors">
-                        <input
-                          type="radio"
-                          name="aiProblems"
-                          value={problem}
-                          checked={formData.aiProblems === problem}
-                          onChange={(e) => handleInputChange('aiProblems', e.target.value)}
-                          className="mr-3 w-4 h-4 text-green-600"
-                        />
-                        <span className="text-base font-medium text-gray-800">{problem}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <Label className="text-base font-bold text-gray-800 mb-3 block">
-                    7. How do you feel about the number of AI tools available? *
-                  </Label>
-                  <div className="space-y-3">
-                    {[
-                      'Excited - love having options',
-                      'Overwhelmed - too many choices',
-                      'Confused - don\'t know where to start',
-                      'Frustrated - tried several, none work well'
-                    ].map(feeling => (
-                      <label key={feeling} className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-green-50 cursor-pointer transition-colors">
-                        <input
-                          type="radio"
-                          name="overwhelmLevel"
-                          value={feeling}
-                          checked={formData.overwhelmLevel === feeling}
-                          onChange={(e) => handleInputChange('overwhelmLevel', e.target.value)}
-                          className="mr-3 w-4 h-4 text-green-600"
-                        />
-                        <span className="text-base font-medium text-gray-800">{feeling}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <Label className="text-base font-bold text-gray-800 mb-3 block">
-                    8. Are you worried about falling behind competitors who use AI? *
-                  </Label>
-                  <div className="space-y-3">
-                    {[
-                      'Very concerned - feels urgent',
-                      'Somewhat concerned',
-                      'Not really worried',
-                      'Don\'t think AI matters for my business'
-                    ].map(concern => (
-                      <label key={concern} className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-green-50 cursor-pointer transition-colors">
-                        <input
-                          type="radio"
-                          name="behindConcern"
-                          value={concern}
-                          checked={formData.behindConcern === concern}
-                          onChange={(e) => handleInputChange('behindConcern', e.target.value)}
-                          className="mr-3 w-4 h-4 text-green-600"
-                        />
-                        <span className="text-base font-medium text-gray-800">{concern}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <Label className="text-base font-bold text-gray-800 mb-3 block">
-                    9. What sounds most appealing to you? *
-                  </Label>
-                  <div className="space-y-3">
-                    {[
-                      'One platform that handles everything',
-                      'Step-by-step guidance from experts',
-                      'AI that learns my specific business',
-                      'Just knowing which tools actually work',
-                      'Having someone set it up for me'
-                    ].map(option => (
-                      <label key={option} className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-green-50 cursor-pointer transition-colors">
-                        <input
-                          type="radio"
-                          name="appealingOption"
-                          value={option}
-                          checked={formData.appealingOption === option}
-                          onChange={(e) => handleInputChange('appealingOption', e.target.value)}
-                          className="mr-3 w-4 h-4 text-green-600"
-                        />
-                        <span className="text-base font-medium text-gray-800">{option}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
+              <Label className="text-base font-bold text-gray-800 mb-3 block">
+                4. How do most of your new customers find you? *
+              </Label>
+              <div className="space-y-3">
+                {[
+                  'Word of mouth/referrals',
+                  'Walk-by foot traffic',
+                  'Google search',
+                  'Social media (Instagram, Facebook, TikTok)',
+                  'Traditional advertising (flyers, newspaper)'
+                ].map(discovery => (
+                  <label key={discovery} className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-green-50 cursor-pointer transition-colors">
+                    <input
+                      type="radio"
+                      name="customerDiscovery"
+                      value={discovery}
+                      checked={formData.customerDiscovery === discovery}
+                      onChange={(e) => handleInputChange('customerDiscovery', e.target.value)}
+                      className="mr-3 w-4 h-4 text-green-600"
+                    />
+                    <span className="text-base font-medium text-gray-800">{discovery}</span>
+                  </label>
+                ))}
               </div>
             </div>
-          )}
+
+            <div>
+              <Label className="text-base font-bold text-gray-800 mb-3 block">
+                5. How comfortable are you with technology? *
+              </Label>
+              <div className="space-y-3">
+                {[
+                  'Very comfortable - I use multiple apps and tools',
+                  'Somewhat comfortable - I use basics like smartphone apps',
+                  'Limited comfort - I prefer simple solutions',
+                  'Need help - I avoid complex technology'
+                ].map(comfort => (
+                  <label key={comfort} className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-green-50 cursor-pointer transition-colors">
+                    <input
+                      type="radio"
+                      name="techComfort"
+                      value={comfort}
+                      checked={formData.techComfort === comfort}
+                      onChange={(e) => handleInputChange('techComfort', e.target.value)}
+                      className="mr-3 w-4 h-4 text-green-600"
+                    />
+                    <span className="text-base font-medium text-gray-800">{comfort}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <Label className="text-base font-bold text-gray-800 mb-3 block">
+                6. What would have the biggest impact on your business? (Select all that apply) *
+              </Label>
+              <p className="text-sm text-gray-600 mb-4">Choose all outcomes that would significantly help your business</p>
+              <div className="space-y-3">
+                {[
+                  '50% more customers walking through the door',
+                  'Never missing a customer call or booking request',
+                  'Saving 10+ hours per week on admin tasks',
+                  'Professional online presence that competes with bigger businesses'
+                ].map(goal => (
+                  <label key={goal} className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors ${
+                    formData.businessGoals.includes(goal) 
+                      ? 'border-green-500 bg-green-50' 
+                      : 'border-gray-200 hover:bg-green-50'
+                  }`}>
+                    <input
+                      type="checkbox"
+                      value={goal}
+                      checked={formData.businessGoals.includes(goal)}
+                      onChange={() => handleMultipleChoice('businessGoals', goal)}
+                      className="mr-3 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
+                    />
+                    <span className="text-base font-medium text-gray-800">{goal}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
 
           {/* Error Display */}
           {error && (
@@ -762,24 +652,14 @@ Keep the entire response under 400 words. Use simple language like you're talkin
             </div>
           )}
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-between mt-8">
+          {/* Generate Button */}
+          <div className="flex justify-center mt-8">
             <Button
-              onClick={prevStep}
-              disabled={currentStep === 1}
-              variant="outline"
-              className={`font-bold ${currentStep === 1 ? 'invisible' : 'text-green-600 border-green-300'}`}
-            >
-              Previous
-            </Button>
-
-            <Button
-              onClick={nextStep}
+              onClick={generateAssessment}
               disabled={!isStepComplete() || isGenerating}
-              className="bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold px-8 py-3"
+              className="bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold px-12 py-4 text-lg"
             >
-              {isGenerating ? 'Generating Your Plan...' : 
-               currentStep === 2 ? 'Generate My AI Plan' : 'Next'}
+              {isGenerating ? 'Generating Your AI Plan...' : 'Generate My AI Plan'}
             </Button>
           </div>
         </div>
